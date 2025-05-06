@@ -2,6 +2,7 @@ import streamlit as st
 import openai
 from datetime import datetime
 import random
+import groq
 
 # Configure page
 st.set_page_config(
@@ -31,9 +32,11 @@ st.markdown("""
 
 # Secure API key handling
 def get_api_key():
-    return st.secrets["openai"]["api_key"]
+    return st.secrets["groq"]["api_key"]  # Updated for Groq
 
-openai.api_key = get_api_key()
+# Initialize Groq client
+client = groq.Client(api_key=get_api_key())
+
 
 # Language configurations
 LANGUAGES = {
@@ -62,8 +65,8 @@ def get_ai_response(prompt, language, level):
             {"role": "system", "content": f"You are a helpful {language} language tutor at {level} level."},
             {"role": "user", "content": prompt}
         ]
-        response = openai.ChatCompletion.create(
-            model="gpt-4o",
+        response = client.chat.completions.create(
+            model="mixtral-8x7b-32768",  # Groq's best model
             messages=messages,
             temperature=0.7,
             max_tokens=150
