@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}Practice - {{ languages[selected_language] }}{% endblock %}
+
+{% block content %}
+    <!-- Practice Zone Section -->
+    <section class="practice-zone">
+        <h1>✍️ Practice Zone</h1>
+        <div class="practice-container">
+            <h2>📝 Write in {{ languages[selected_language] }}</h2>
+            <div class="practice-content">
+                <div class="practice-image">
+                    <!-- Placeholder for image -->
+                    <img src="{{ url_for('static', filename='practice.jpg') }}" alt="Practice Image">
+                </div>
+                <form method="POST" action="{{ url_for('practice') }}">
+                    <textarea name="writing_input" placeholder="Write a sentence or short text in {{ languages[selected_language] }}..." required></textarea>
+                    <button type="submit" class="practice-button">Submit for Feedback</button>
+                </form>
+                {% if feedback %}
+                    <div class="feedback-text">{{ feedback_html | safe }}</div>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+{% endblock %}

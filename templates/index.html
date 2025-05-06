@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Learn Languages with LangMaster Pro</h1>
+        <p class="hero-tagline">Master English, Japanese, German, and French with AI-powered lessons!</p>
+        <a href="{{ url_for('learn') }}" class="cta-button">Start Learning Now</a>
+    </section>
+
+    <!-- Keypoints Section -->
+    <section class="keypoints">
+        <h2>Why Choose LangMaster Pro?</h2>
+        <div class="keypoints-grid">
+            <div class="keypoint">
+                <h3>AI-Powered Learning</h3>
+                <p>Get personalized lessons and feedback from advanced AI tutors.</p>
+            </div>
+            <div class="keypoint">
+                <h3>Multi-Language Support</h3>
+                <p>Learn English, Japanese, German, and French at your own pace.</p>
+            </div>
+            <div class="keypoint">
+                <h3>Interactive Features</h3>
+                <p>Daily challenges, quizzes, and AI chats make learning fun.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Additional Content Section -->
+    <section class="additional-content">
+        <h2>Join Our Learning Community</h2>
+        <p>LangMaster Pro is designed to make language learning engaging and effective. Start your journey today and unlock a world of opportunities!</p>
+        <a href="{{ url_for('practice') }}" class="cta-button">Try a Practice Session</a>
+    </section>
+{% endblock %}

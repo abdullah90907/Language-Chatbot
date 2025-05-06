@@ -1,42 +1,14 @@
-import streamlit as st
-import openai
-from datetime import datetime
-import random
-import groq
+from flask import Flask, render_template, request, session, redirect, url_for
+from groq import Groq
+import os
+import markdown
+from datetime import datetime, date
 
-# Configure page
-st.set_page_config(
-    page_title="LangMaster Pro",
-    page_icon="🌎",
-    layout="wide",
-    initial_sidebar_state="expanded"
-)
+app = Flask(__name__)
+app.secret_key = os.urandom(24)  # Required for session management
 
-# Enhanced CSS for UI
-st.markdown("""
-<style>
-    .main {
-        padding: 2rem;
-        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-    }
-    .stButton>button {
-        width: 100%;
-        background: linear-gradient(45deg, #4CAF50, #45a049);
-        color: white;
-        border-radius: 10px;
-        padding: 0.75rem;
-        font-weight: 600;
-    }
-</style>
-""", unsafe_allow_html=True)
-
-# Secure API key handling
-def get_api_key():
-    return st.secrets["groq"]["api_key"]  # Updated for Groq
-
-# Initialize Groq client
-client = groq.Client(api_key=get_api_key())
-
+# Initialize Groq client with environment variable
+client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
 # Language configurations
 LANGUAGES = {
@@ -46,19 +18,7 @@ LANGUAGES = {
     "French": "🇫🇷 French"
 }
 
-# Session state for quiz progress
-if "quiz_index" not in st.session_state:
-    st.session_state.quiz_index = 0
-if "quiz_answered" not in st.session_state:
-    st.session_state.quiz_answered = False
-if "correct_answer" not in st.session_state:
-    st.session_state.correct_answer = ""
-if "user_answer" not in st.session_state:
-    st.session_state.user_answer = ""
-if "quiz_question" not in st.session_state:
-    st.session_state.quiz_question = ""
-
-# Fetch AI-generated response based on the selected language and level
+# Fetch AI-generated response
 def get_ai_response(prompt, language, level):
     try:
         messages = [
@@ -66,115 +26,142 @@ def get_ai_response(prompt, language, level):
             {"role": "user", "content": prompt}
         ]
         response = client.chat.completions.create(
-            model="mixtral-8x7b-32768",  # Groq's best model
+            model="llama-3.3-70b-versatile",
             messages=messages,
             temperature=0.7,
-            max_tokens=150
+            max_tokens=200
         )
         return response.choices[0].message.content
     except Exception as e:
         return f"Error: {str(e)}"
 
 # Daily challenge generator
-def generate_daily_challenge(language, level):
-    prompt = f"Generate a beginner-level daily challenge in {language}."
-    response = get_ai_response(prompt, language, level)
-    return response
+def generate_daily_challenge(language, level, day_number):
+    prompt = f"""
+    Generate a beginner-level daily challenge in {language} formatted in Markdown. Structure it with:
+    - A main header (# Daily Challenge: Day {day_number})
+    - A topic subheader (## Topic: [Topic Name])
+    - Exactly 3 tasks (### Task 1: [Task Name], etc.) with clear, engaging instructions
+    - Use numbered lists or bullet points for subtasks
+    - Keep instructions concise, motivational, and beginner-friendly
+    - Vary tasks (e.g., vocabulary, speaking, writing)
+    Example:
+    # Daily Challenge: Day {day_number}
+    ## Topic: Greetings
+    ### Task 1: Vocabulary Boost
+    Learn these key phrases:
+    - Good morning: A friendly morning greeting
+    - How are you?: Ask about someone’s day
+    ### Task 2: Practice Speaking
+    Say these sentences aloud:
+    1. "Good morning! How are you?"
+    2. "I’m happy to meet you!"
+    ### Task 3: Quick Writing
+    Write a short greeting to a friend in {language}.
+    """
+    return get_ai_response(prompt, language, level)
 
 # Quiz question generator
 def get_quiz_question(language, level):
     prompt = f"Generate a multiple-choice quiz question for {language} at {level} level."
     response = get_ai_response(prompt, language, level)
-    if response:
-        st.session_state.correct_answer = "Answer"  # Extracted answer based on AI response formatting
-    return response
+    # Mock parsing (adjust based on actual AI response format)
+    return {
+        "question": response,
+        "options": ["Option 1", "Option 2", "Option 3", "Option 4"],
+        "correct_answer": "Option 1"  # Replace with logic to extract correct answer
+    }
 
-# Main function for the app
-def main():
-    selected_language, selected_level = render_sidebar()
+# Home route
+@app.route('/', methods=['GET', 'POST'])
+def home():
+    # Initialize session defaults
+    if 'language' not in session:
+        session['language'] = 'English'
+    if 'level' not in session:
+        session['level'] = 'Beginner'
+    if 'quiz_data' not in session:
+        session['quiz_data'] = {}
+    if 'chat_messages' not in session:
+        session['chat_messages'] = []
+
+    # Handle language/level selection
+    if request.method == 'POST':
+        session['language'] = request.form.get('language', session['language'])
+        session['level'] = request.form.get('level', session['level'])
+        return redirect(url_for('home'))
+
+    return render_template('index.html', languages=LANGUAGES, selected_language=session['language'], selected_level=session['level'])
+
+# Learning tab
+@app.route('/learn', methods=['GET', 'POST'])
+def learn():
+    # Initialize session for challenge tracking
+    if 'challenge_day' not in session:
+        session['challenge_day'] = 1
+        session['last_challenge_date'] = date.today().isoformat()
     
-    st.title(f"{LANGUAGES[selected_language]} LangMaster Pro")
-    
-    # Main navigation
-    tabs = st.tabs(["Learn", "Practice", "Quiz", "Chat with AI"])
+    # Check if it's a new day
+    today = date.today()
+    last_date = date.fromisoformat(session['last_challenge_date'])
+    if today > last_date:
+        session['challenge_day'] += 1
+        session['last_challenge_date'] = today.isoformat()
 
-    with tabs[0]:
-        render_learning_tab(selected_language, selected_level)
-    with tabs[1]:
-        render_practice_tab(selected_language, selected_level)
-    with tabs[2]:
-        render_quiz_tab(selected_language, selected_level)
-    with tabs[3]:
-        render_chat_tab(selected_language, selected_level)
-
-# Sidebar with language and level options
-def render_sidebar():
-    st.sidebar.title("🌎 LangMaster Pro")
-    selected_language = st.sidebar.selectbox("Choose Your Language", list(LANGUAGES.keys()))
-    selected_level = st.sidebar.select_slider("Proficiency Level", ["Beginner", "Intermediate", "Advanced"])
-    return selected_language, selected_level
-
-# Learning tab with daily challenges and tips
-def render_learning_tab(language, level):
-    st.header("📚 Learning Center")
-    with st.expander("🎯 Daily Challenge", expanded=True):
-        challenge = generate_daily_challenge(language, level)
-        st.markdown(challenge)
-        if st.button("Complete Challenge"):
-            st.success("Challenge completed! Check back tomorrow for a new challenge.")
+    # Generate challenge with current day number
+    challenge = generate_daily_challenge(session['language'], session['level'], session['challenge_day'])
+    challenge_html = markdown.markdown(challenge)
+    message = None
+    if request.method == 'POST' and request.form.get('action') == 'complete':
+        message = "Challenge completed! Check back tomorrow for Day {}!".format(session['challenge_day'] + 1)
+    return render_template('learn.html', challenge_html=challenge_html, message=message, languages=LANGUAGES, selected_language=session['language'], selected_level=session['level'])
 
 # Practice tab
-def render_practice_tab(language, level):
-    st.header("🎯 Practice Zone")
-    practice_type = st.selectbox("Choose practice type", ["Writing", "Speaking", "Grammar", "Vocabulary"])
-    if practice_type == "Writing":
-        user_input = st.text_area("Write in " + language)
-        if st.button("Get Feedback"):
-            feedback = get_ai_response(f"Provide feedback on: {user_input}", language, level)
-            st.markdown(feedback)
+@app.route('/practice', methods=['GET', 'POST'])
+def practice():
+    feedback_html = None
+    if request.method == 'POST':
+        user_input = request.form.get('writing_input')
+        if user_input:
+            feedback = get_ai_response(f"Provide concise, beginner-friendly feedback in Markdown on this {session['language']} text: {user_input}", session['language'], session['level'])
+            feedback_html = markdown.markdown(feedback)
+    return render_template('practice.html', feedback_html=feedback_html, languages=LANGUAGES, selected_language=session['language'], selected_level=session['level'])
 
-# # Quiz tab with improved functionality
-def render_quiz_tab(language, level):
-    st.header("📝 Quiz Time")
+# Quiz tab
+@app.route('/quiz', methods=['GET', 'POST'])
+def quiz():
+    # Initialize quiz state
+    if 'quiz_data' not in session:
+        session['quiz_data'] = {}
 
-    # Fetch a new question if not already fetched or if moving to a new question
-    if not st.session_state.quiz_question or st.button("Next Question"):
-        st.session_state.quiz_question = get_quiz_question(language, level)
-        st.session_state.quiz_answered = False
-        st.session_state.user_answer = ""
-    
-    if st.session_state.quiz_question:
-        st.markdown(st.session_state.quiz_question)
-        
-        # Display answer options and submission button only if the question is loaded
-        st.session_state.user_answer = st.radio("Choose your answer:", ["Option 1", "Option 2", "Option 3", "Option 4"], index=0, key=st.session_state.quiz_index)
-        
-        if not st.session_state.quiz_answered:
-            if st.button("Submit Answer"):
-                st.session_state.quiz_answered = True
-                if st.session_state.user_answer == st.session_state.correct_answer:
-                    st.success("Correct answer!")
-                else:
-                    st.error(f"Incorrect! The correct answer was: {st.session_state.correct_answer}")
+    if request.method == 'POST':
+        action = request.form.get('action')
+        if action == 'next':
+            # Generate new question
+            quiz_data = get_quiz_question(session['language'], session['level'])
+            session['quiz_data'] = quiz_data
+            session['quiz_answered'] = False
+        elif action == 'submit':
+            user_answer = request.form.get('answer')
+            session['quiz_answered'] = True
+            session['quiz_result'] = user_answer == session['quiz_data']['correct_answer']
+        return redirect(url_for('quiz'))
 
+    quiz_data = session.get('quiz_data', {})
+    return render_template('quiz.html', quiz_data=quiz_data, answered=session.get('quiz_answered', False), result=session.get('quiz_result'), language=session['language'])
 
+# Chat tab
+@app.route('/chat', methods=['GET', 'POST'])
+def chat():
+    if request.method == 'POST':
+        user_prompt = request.form.get('prompt')
+        if user_prompt:
+            session['chat_messages'].append({"role": "user", "content": user_prompt})
+            response = get_ai_response(user_prompt, session['language'], session['level'])
+            session['chat_messages'].append({"role": "assistant", "content": response})
+        return redirect(url_for('chat'))
 
-# Chat with AI
-def render_chat_tab(language, level):
-    st.header("💬 Chat with AI Tutor")
-    if "messages" not in st.session_state:
-        st.session_state.messages = []
-    for message in st.session_state.messages:
-        with st.chat_message(message["role"]):
-            st.markdown(message["content"])
-    if prompt := st.chat_input("Ask your language learning question"):
-        st.session_state.messages.append({"role": "user", "content": prompt})
-        with st.chat_message("user"):
-            st.markdown(prompt)
-        with st.chat_message("assistant"):
-            response = get_ai_response(prompt, language, level)
-            st.markdown(response)
-            st.session_state.messages.append({"role": "assistant", "content": response})
+    return render_template('chat.html', messages=session.get('chat_messages', []), language=session['language'])
 
-if __name__ == "__main__":
-    main()
+if __name__ == '__main__':
+    app.run(debug=True)

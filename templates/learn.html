@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}Learn - {{ languages[selected_language] }}{% endblock %}
+
+{% block content %}
+    <!-- Learning Center Section -->
+    <section class="learning-center">
+        <h1>📚 Learning Center</h1>
+        <div class="challenge-container">
+            <h2>🎯 Daily Challenge for {{ languages[selected_language] }}</h2>
+            <div class="challenge-content">
+                <div class="challenge-image">
+                    <img src="{{ url_for('static', filename='img1.jpg') }}" alt="Daily Challenge Image">
+                </div>
+                <div>{{ challenge_html | safe }}</div>
+            </div>
+            <form method="POST" action="{{ url_for('learn') }}">
+                <input type="hidden" name="action" value="complete">
+                <button type="submit" class="challenge-button">Complete Challenge</button>
+            </form>
+            {% if message %}
+                <p class="success-message">{{ message }}</p>
+            {% endif %}
+        </div>
+    </section>
+{% endblock %}
