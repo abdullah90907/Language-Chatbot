@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LangMaster Pro - {% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">
+            <a href="{{ url_for('home') }}">🌎 LangMaster Pro</a>
+        </div>
+        <div class="nav-links">
+            <a href="{{ url_for('home') }}" class="nav-link">Home</a>
+            <a href="{{ url_for('learn') }}" class="nav-link">Learn</a>
+            <a href="{{ url_for('practice') }}" class="nav-link">Practice</a>
+            <a href="{{ url_for('quiz') }}" class="nav-link">Quiz</a>
+            <a href="{{ url_for('chat') }}" class="nav-link">Chat</a>
+            <!-- Language and Level Selection -->
+            <form method="POST" action="{{ url_for('home') }}" class="nav-form">
+                <select name="language" onchange="this.form.submit()">
+                    {% for lang in languages %}
+                        <option value="{{ lang }}" {% if lang == selected_language %}selected{% endif %}>
+                            {{ languages[lang] }}
+                        </option>
+                    {% endfor %}
+                </select>
+                <select name="level" onchange="this.form.submit()">
+                    {% for level in ['Beginner', 'Intermediate', 'Advanced'] %}
+                        <option value="{{ level }}" {% if level == selected_level %}selected{% endif %}>
+                            {{ level }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </form>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>LangMaster Pro - Learn Languages with AI</p>
+        <div class="social-links">
+            <a href="https://twitter.com" target="_blank" class="social-link">Twitter</a>
+            <a href="https://linkedin.com" target="_blank" class="social-link">LinkedIn</a>
+        </div>
+        <p>&copy; 2025 LangMaster Pro. All rights reserved.</p>
+    </footer>
+</body>
+</html>
