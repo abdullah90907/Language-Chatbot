@@ -1,38 +1,196 @@
 {% extends 'base.html' %}
 
-{% block title %}Home{% endblock %}
+{% block title %}LangMaster Pro - Learn Languages with Ease{% endblock %}
 
 {% block content %}
-    <!-- Hero Section -->
-    <section class="hero">
-        <h1>Learn Languages with LangMaster Pro</h1>
-        <p class="hero-tagline">Master English, Japanese, German, and French with AI-powered lessons!</p>
-        <a href="{{ url_for('learn') }}" class="cta-button">Start Learning Now</a>
-    </section>
+<!-- Hero Video Section -->
+<section class="relative">
+    <video autoplay loop muted class="w-full h-[600px] object-cover">
+        <source src="{{ url_for('image', filename='video.mp4') }}" type="video/mp4">
+        <img src="{{ url_for('static', filename='video-fallback.jpg') }}" alt="LangMaster Pro" class="w-full h-[600px] object-cover">
+    </video>
+    <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
+        <div class="text-center text-white">
+            <h1 class="text-4xl md:text-6xl font-bold mb-4 animate-fade-in">Welcome to LangMaster Pro</h1>
+            <p class="text-xl md:text-2xl mb-6 animate-fade-in delay-200">Master languages with interactive lessons, quizzes, and AI-powered chats.</p>
+            <a href="{{ url_for('learn') }}" class="bg-green-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-600 transition transform hover:scale-105">Start Learning</a>
+        </div>
+    </div>
+</section>
 
-    <!-- Keypoints Section -->
-    <section class="keypoints">
-        <h2>Why Choose LangMaster Pro?</h2>
-        <div class="keypoints-grid">
-            <div class="keypoint">
-                <h3>AI-Powered Learning</h3>
-                <p>Get personalized lessons and feedback from advanced AI tutors.</p>
+<!-- Core Features Section -->
+<section class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-12 animate-fade-in">Our Core Features</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <!-- Feature 1: Learn -->
+            <div class="bg-gray-100 rounded-lg shadow-lg p-6 text-center transform transition hover:scale-105 animate-fade-in delay-100">
+                <img src="{{ url_for('image', filename='learn1.jpeg') }}" alt="Learn" class="w-32 h-32 mx-auto mb-4 rounded-full">
+                <h3 class="text-xl font-semibold text-gray-800 mb-2">Daily Lessons</h3>
+                <p class="text-gray-600">Engaging challenges tailored to your level, from beginner to advanced.</p>
             </div>
-            <div class="keypoint">
-                <h3>Multi-Language Support</h3>
-                <p>Learn English, Japanese, German, and French at your own pace.</p>
+            <!-- Feature 2: Quiz -->
+            <div class="bg-gray-100 rounded-lg shadow-lg p-6 text-center transform transition hover:scale-105 animate-fade-in delay-200">
+                <img src="{{ url_for('image', filename='quiz1.jpg') }}" alt="Quiz" class="w-32 h-32 mx-auto mb-4 rounded-full">
+                <h3 class="text-xl font-semibold text-gray-800 mb-2">Interactive Quizzes</h3>
+                <p class="text-gray-600">Test your knowledge with fun, dynamic quizzes.</p>
             </div>
-            <div class="keypoint">
-                <h3>Interactive Features</h3>
-                <p>Daily challenges, quizzes, and AI chats make learning fun.</p>
+            <!-- Feature 3: Chat -->
+            <div class="bg-gray-100 rounded-lg shadow-lg p-6 text-center transform transition hover:scale-105 animate-fade-in delay-300">
+                <img src="{{ url_for('image', filename='chat2.jpg') }}" alt="Chat" class="w-32 h-32 mx-auto mb-4 rounded-full">
+                <h3 class="text-xl font-semibold text-gray-800 mb-2">AI-Powered Chat</h3>
+                <p class="text-gray-600">Practice conversations with our intelligent AI tutor.</p>
+            </div>
+            <!-- Feature 4: Progress -->
+            <div class="bg-gray-100 rounded-lg shadow-lg p-6 text-center transform transition hover:scale-105 animate-fade-in delay-400">
+                <img src="{{ url_for('image', filename='practice1.jpeg') }}" alt="Progress" class="w-32 h-32 mx-auto mb-4 rounded-full">
+                <h3 class="text-xl font-semibold text-gray-800 mb-2">Track Progress</h3>
+                <p class="text-gray-600">Monitor your learning journey and celebrate milestones.</p>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- Additional Content Section -->
-    <section class="additional-content">
-        <h2>Join Our Learning Community</h2>
-        <p>LangMaster Pro is designed to make language learning engaging and effective. Start your journey today and unlock a world of opportunities!</p>
-        <a href="{{ url_for('practice') }}" class="cta-button">Try a Practice Session</a>
-    </section>
+<!-- User Feedback Carousel -->
+<section class="py-16 bg-gray-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-12 animate-fade-in">What Our Users Say</h2>
+        <div class="relative overflow-hidden">
+            <div class="flex animate-slide-left">
+                <!-- Testimonial 1 -->
+                <!-- Testimonial 1 -->
+                <div class="min-w-[300px] bg-white rounded-lg shadow-lg p-6 mx-4">
+                    <div class="flex items-center mb-4">
+                        <img src="{{ url_for('image', filename='user1.jpg') }}" alt="User 1" class="w-12 h-12 rounded-full mr-4 object-cover">
+                        <div>
+                            <h4 class="text-lg font-semibold text-gray-800">Anna S.</h4>
+                            <div class="flex text-yellow-400">★★★★★</div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600">"LangMaster Pro made learning Spanish so fun! The quizzes are addictive!"</p>
+                </div>
+                <!-- Testimonial 2 -->
+                <div class="min-w-[300px] bg-white rounded-lg shadow-lg p-6 mx-4">
+                    <div class="flex items-center mb-4">
+                        <img src="{{ url_for('image', filename='user2.jpg') }}" alt="User 2" class="w-12 h-12 rounded-full mr-4 object-cover">
+                        <div>
+                            <h4 class="text-lg font-semibold text-gray-800">Mark T.</h4>
+                            <div class="flex text-yellow-400">★★★★★</div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600">"The AI chat helped me practice French conversations confidently."</p>
+                </div>
+                <!-- Testimonial 3 -->
+                <div class="min-w-[300px] bg-white rounded-lg shadow-lg p-6 mx-4">
+                    <div class="flex items-center mb-4">
+                        <img src="{{ url_for('image', filename='user3.jpg') }}" alt="User 3" class="w-12 h-12 rounded-full mr-4">
+                        <div>
+                            <h4 class="text-lg font-semibold text-gray-800">Priya R.</h4>
+                            <div class="flex text-yellow-400">★★★★★</div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600">"Daily lessons keep me motivated to learn German every day."</p>
+                </div>
+                <!-- Testimonial 4 -->
+                <div class="min-w-[300px] bg-white rounded-lg shadow-lg p-6 mx-4">
+                    <div class="flex items-center mb-4">
+                        <img src="{{ url_for('image', filename='user4.jpg') }}" alt="User 4" class="w-12 h-12 rounded-full mr-4">
+                        <div>
+                            <h4 class="text-lg font-semibold text-gray-800">James L.</h4>
+                            <div class="flex text-yellow-400">★★★</div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600">"Tracking my progress is so rewarding. Highly recommend!"</p>
+                </div>
+                <!-- Testimonial 5 -->
+                <div class="min-w-[300px] bg-white rounded-lg shadow-lg p-6 mx-4">
+                    <div class="flex items-center mb-4">
+                        <img src="{{ url_for('image', filename='user5.jpg') }}" alt="User 5" class="w-12 h-12 rounded-full mr-4">
+                        <div>
+                            <h4 class="text-lg font-semibold text-gray-800">Sofia M.</h4>
+                            <div class="flex text-yellow-400">★★★★</div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600">"The best language learning app I've tried. It's engaging and effective!"</p>
+                </div>
+                <!-- Duplicate for seamless looping -->
+                <div class="min-w-[300px] bg-white rounded-lg shadow-lg p-6 mx-4">
+                    <div class="flex items-center mb-4">
+                        <img src="{{ url_for('image', filename='user1.jpg') }}" alt="User 1" class="w-12 h-12 rounded-full mr-4">
+                        <div>
+                            <h4 class="text-lg font-semibold text-gray-800">Anna S.</h4>
+                            <div class="flex text-yellow-400">★★★★★</div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600">"LangMaster Pro made learning Spanish so fun! The quizzes are addictive!"</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-gray-800 text-white py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <!-- About -->
+            <div>
+                <h3 class="text-2xl font-bold text-white mb-4">LangMaster Pro</h3>
+                <p class="text-gray-300 font-medium text-base">Empowering you to master languages with interactive tools and AI-driven learning. Join thousands of learners worldwide!</p>
+            </div>
+            <!-- Navigation -->
+            <div>
+                <h3 class="text-2xl font-bold text-white mb-4">Quick Links</h3>
+                <ul class="space-y-2">
+                    <li><a href="{{ url_for('home') }}" class="text-gray-300 hover:text-green-500 font-medium text-base transition">Home</a></li>
+                    <li><a href="{{ url_for('learn') }}" class="text-gray-300 hover:text-green-500 font-medium text-base transition">Learn</a></li>
+                    <li><a href="{{ url_for('quiz') }}" class="text-gray-300 hover:text-green-500 font-medium text-base transition">Quiz</a></li>
+                    <li><a href="{{ url_for('chat') }}" class="text-gray-300 hover:text-green-500 font-medium text-base transition">Chat</a></li>
+                    <li><a href="{{ url_for('practice') }}" class="text-gray-300 hover:text-green-500 font-medium text-base transition">Practice</a></li>
+                </ul>
+            </div>
+            <!-- Contact -->
+            <div>
+                <h3 class="text-2xl font-bold text-white mb-4">Contact Us</h3>
+                <p class="text-gray-300 font-medium text-base">Email: support@langmasterpro.com</p>
+                <p class="text-gray-300 font-medium text-base">Phone: +1 (555) 123-4567</p>
+                <p class="text-gray-300 font-medium text-base">Address: 123 Language Lane, Learn City, LC 12345</p>
+            </div>
+            <!-- Social Media -->
+            <div>
+                <h3 class="text-2xl font-bold text-white mb-4">Follow Us</h3>
+                <div class="flex space-x-4">
+                    <a href="#" class="text-gray-300 hover:text-green-500 transition"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M22 12c0-5.522-4.477-10-10-10S2 6.478 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/></svg></a>
+                    <a href="#" class="text-gray-300 hover:text-green-500 transition"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/></svg></a>
+                    <a href="#" class="text-gray-300 hover:text-green-500 transition"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M4.98 3.5c0 1.381-1.11 2.5-2.48 2.5s-2.48-1.119-2.48-2.5c0-1.38 1.11-2.5 2.48-2.5s2.48 1.12 2.48 2.5zm.02 4.5h-5v16h5v-16zm7.982 0h-4.968v16h4.969v-8.399c0-4.67 6.029-5.052 6.029 0v8.399h4.988v-10.131c0-7.88-8.922-7.593-11.018-3.714v-2.155z"/></svg></a>
+                </div>
+            </div>
+        </div>
+        <div class="mt-8 text-center text-gray-200 font-medium text-base">
+            <p>© 2025 LangMaster Pro. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<!-- Custom CSS for Animations -->
+<style>
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in {
+        animation: fadeIn 1s ease-out forwards;
+    }
+    .delay-100 { animation-delay: 100ms; }
+    .delay-200 { animation-delay: 200ms; }
+    .delay-300 { animation-delay: 300ms; }
+    .delay-400 { animation-delay: 400ms; }
+    @keyframes slideLeft {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-50%); }
+    }
+    .animate-slide-left {
+        animation: slideLeft 20s linear infinite;
+    }
+</style>
 {% endblock %}

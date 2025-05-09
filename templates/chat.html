@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}Chat - {{ languages[selected_language] }}{% endblock %}
+
+{% block content %}
+    <!-- Chat Section -->
+    <section class="chat-zone">
+        <h1 style="color: black; font-size: 250%; font-weight: 900;">💬 Chat Practice</h1>
+        <div class="chat-container">
+            <h2 style="color: black; font-size: 200%; font-weight: 600;">🗣️ Practice {{ languages[selected_language] }} Conversation</h2>
+            <div class="chat-content">
+                <div class="chat-image">
+                    <img src="{{ url_for('image', filename='chat1.webp') }}" alt="Chat Image">
+                </div>
+                <div class="chat-messages">
+                    {% if user_message or assistant_response %}
+                        {% if user_message %}
+                            <div class="chat-message user-message">
+                                <strong>You:</strong> {{ user_message }}
+                            </div>
+                        {% endif %}
+                        {% if assistant_response %}
+                            <div class="chat-message assistant-message">
+                                <strong>Tutor:</strong> {{ assistant_response | safe }}
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        <p>Start the conversation by typing a message below!</p>
+                    {% endif %}
+                </div>
+                <form method="POST" action="{{ url_for('chat') }}">
+                    <input type="hidden" name="action" value="send">
+                    <textarea name="user_input" placeholder="Type your message in {{ languages[selected_language] }}..." required></textarea>
+                    <button type="submit" class="chat-button">Send</button>
+                </form>
+                {% if error_message %}
+                    <p class="error-message">{{ error_message }}</p>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+{% endblock %}

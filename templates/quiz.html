@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %}Quiz - {{ languages[selected_language] }}{% endblock %}
+
+{% block content %}
+    <!-- Quiz Time Section -->
+    <section class="quiz-zone">
+        <h1>❓ Quiz Time</h1>
+        <div class="quiz-container">
+            <h2>🧠 Test Your {{ languages[selected_language] }} Skills</h2>
+            <div class="quiz-content">
+                <div class="quiz-image">
+                    <!-- Placeholder for image -->
+                    <img src="{{ url_for('image', filename='quiz.jpg') }}" alt="Quiz Image">
+                </div>
+                {% if quiz_data.question and quiz_data.options and quiz_data.correct_answer and quiz_data.options|length == 4 %}
+                    <div class="quiz-question-wrapper">
+                        <div class="quiz-question">
+                            <h3>Question:</h3>
+                            {{ quiz_data.question_html | safe }}
+                        </div>
+                        <form method="POST" action="{{ url_for('quiz') }}">
+                            <input type="hidden" name="action" value="submit">
+                            {% for option in quiz_data.options %}
+                                <label class="quiz-option">
+                                    <input type="radio" name="answer" value="{{ option }}" required>
+                                    {{ option }}
+                                </label>
+                            {% endfor %}
+                            <button type="submit" class="quiz-button">Submit Answer</button>
+                        </form>
+                    </div>
+                    {% if answered %}
+                        <div class="quiz-result">
+                            {% if result is not none %}
+                                {% if result %}
+                                    <p class="success-message">Correct! Great job! 🎉</p>
+                                {% else %}
+                                    <p class="error-message">Wrong, try again! 😊</p>
+                                {% endif %}
+                            {% else %}
+                                <p class="error-message">Result not available. Please try again.</p>
+                            {% endif %}
+                            <form method="POST" action="{{ url_for('quiz') }}">
+                                <input type="hidden" name="action" value="next">
+                                <button type="submit" class="quiz-button">Next Question</button>
+                            </form>
+                        </div>
+                    {% endif %}
+                {% else %}
+                    <p>Unable to load question. Please try again!</p>
+                    <form method="POST" action="{{ url_for('quiz') }}">
+                        <input type="hidden" name="action" value="next">
+                        <button type="submit" class="quiz-button">Load Question</button>
+                    </form>
+                {% endif %}
+                {% if error_message %}
+                    <p class="error-message">{{ error_message }}</p>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+{% endblock %}

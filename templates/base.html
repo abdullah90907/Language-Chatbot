@@ -3,54 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LangMaster Pro - {% block title %}{% endblock %}</title>
+    <title>{% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('image', filename='worldwide.png') }}">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('image', filename='worldwide.ico') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .font-poppins {
+            font-family: 'Poppins', sans-serif;
+        }
+    </style>
 </head>
-<body>
-    <!-- Navbar -->
-    <nav class="navbar">
-        <div class="logo">
-            <a href="{{ url_for('home') }}">🌎 LangMaster Pro</a>
-        </div>
-        <div class="nav-links">
-            <a href="{{ url_for('home') }}" class="nav-link">Home</a>
-            <a href="{{ url_for('learn') }}" class="nav-link">Learn</a>
-            <a href="{{ url_for('practice') }}" class="nav-link">Practice</a>
-            <a href="{{ url_for('quiz') }}" class="nav-link">Quiz</a>
-            <a href="{{ url_for('chat') }}" class="nav-link">Chat</a>
-            <!-- Language and Level Selection -->
-            <form method="POST" action="{{ url_for('home') }}" class="nav-form">
-                <select name="language" onchange="this.form.submit()">
-                    {% for lang in languages %}
-                        <option value="{{ lang }}" {% if lang == selected_language %}selected{% endif %}>
-                            {{ languages[lang] }}
-                        </option>
-                    {% endfor %}
-                </select>
-                <select name="level" onchange="this.form.submit()">
-                    {% for level in ['Beginner', 'Intermediate', 'Advanced'] %}
-                        <option value="{{ level }}" {% if level == selected_level %}selected{% endif %}>
-                            {{ level }}
-                        </option>
-                    {% endfor %}
-                </select>
-            </form>
+<body class="bg-gray-100">
+    <nav class="bg-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <ul class="flex justify-between items-center py-4">
+                <li class="flex items-center mr-6">
+                    <a href="{{ url_for('home') }}" class="flex items-center space-x-2">
+                        <span class="text-4xl leading-none">🌍</span>
+                        <span class="text-gray-900 font-bold text-xl font-poppins hidden sm:inline">LangMaster Pro</span>
+                    </a>
+                </li>
+                <div class="flex space-x-4">
+                    <li><a href="{{ url_for('home') }}" class="text-gray-900 hover:text-green-500 font-bold text-lg font-poppins transition">Home</a></li>
+                    <li><a href="{{ url_for('learn') }}" class="text-gray-900 hover:text-green-500 font-bold text-lg font-poppins transition">Learn</a></li>
+                    <li><a href="{{ url_for('quiz') }}" class="text-gray-900 hover:text-green-500 font-bold text-lg font-poppins transition">Quiz</a></li>
+                    <li><a href="{{ url_for('chat') }}" class="text-gray-900 hover:text-green-500 font-bold text-lg font-poppins transition">Chat</a></li>
+                    <li><a href="{{ url_for('practice') }}" class="text-gray-900 hover:text-green-500 font-bold text-lg font-poppins transition">Practice</a></li>
+                </div>
+                <li>
+                    <form method="POST" action="{{ url_for('home') }}" class="flex space-x-2">
+                        <select name="language" onchange="this.form.submit()" class="border rounded px-2 py-1 text-gray-900 font-medium text-base font-poppins bg-white">
+                            {% for lang in languages %}
+                                <option value="{{ lang }}" {% if lang == selected_language %}selected{% endif %}>{{ languages[lang] }}</option>
+                            {% endfor %}
+                        </select>
+                        <select name="level" onchange="this.form.submit()" class="border rounded px-2 py-1 text-gray-900 font-medium text-base font-poppins bg-white">
+                            <option value="Beginner" {% if selected_level == 'Beginner' %}selected{% endif %}>Beginner</option>
+                            <option value="Intermediate" {% if selected_level == 'Intermediate' %}selected{% endif %}>Intermediate</option>
+                            <option value="Advanced" {% if selected_level == 'Advanced' %}selected{% endif %}>Advanced</option>
+                        </select>
+                    </form>
+                </li>
+            </ul>
         </div>
     </nav>
-
-    <!-- Main Content -->
-    <main class="main-content">
-        {% block content %}{% endblock %}
+    <main>
+        {% block content %}
+        {% endblock %}
     </main>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <p>LangMaster Pro - Learn Languages with AI</p>
-        <div class="social-links">
-            <a href="https://twitter.com" target="_blank" class="social-link">Twitter</a>
-            <a href="https://linkedin.com" target="_blank" class="social-link">LinkedIn</a>
-        </div>
-        <p>&copy; 2025 LangMaster Pro. All rights reserved.</p>
-    </footer>
 </body>
 </html>

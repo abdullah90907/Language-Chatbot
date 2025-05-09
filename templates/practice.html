@@ -11,14 +11,20 @@
             <div class="practice-content">
                 <div class="practice-image">
                     <!-- Placeholder for image -->
-                    <img src="{{ url_for('static', filename='practice.jpg') }}" alt="Practice Image">
+                    <img src="{{ url_for('image', filename='practice.jpg') }}" alt="Practice Image">
                 </div>
                 <form method="POST" action="{{ url_for('practice') }}">
-                    <textarea name="writing_input" placeholder="Write a sentence or short text in {{ languages[selected_language] }}..." required></textarea>
+                    <textarea name="writing_input" placeholder="Write a sentence or short text in {{ languages[selected_language] }}..." required>{{ user_input or '' }}</textarea>
                     <button type="submit" class="practice-button">Submit for Feedback</button>
                 </form>
-                {% if feedback %}
-                    <div class="feedback-text">{{ feedback_html | safe }}</div>
+                {% if error_message %}
+                    <p class="error-message">{{ error_message }}</p>
+                {% endif %}
+                {% if feedback_html %}
+                    <div class="feedback-text">
+                        <h3>Your Feedback:</h3>
+                        {{ feedback_html | safe }}
+                    </div>
                 {% endif %}
             </div>
         </div>
