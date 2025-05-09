@@ -1,5 +1,6 @@
 ![Lan](https://github.com/user-attachments/assets/d9565595-0c2b-4660-af2d-6a70f3c506da)
-﻿# LangMaster-Pro
+﻿
+## LangMaster-Pro
 
 LangMaster-Pro is an interactive language learning platform designed to help users master new languages through engaging tools and AI-driven features. Whether you're a beginner or an advanced learner, LangMaster-Pro offers personalized learning experiences with lessons, practice exercises, quizzes, and AI-powered chat.
 
