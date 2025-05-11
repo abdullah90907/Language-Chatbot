@@ -14,9 +14,9 @@
                 </div>
                 <div>{{ challenge_html | safe }}</div>
             </div>
-            <form method="POST" action="{{ url_for('learn') }}">
+            <form id="challenge-form" method="POST" action="{{ url_for('learn') }}">
                 <input type="hidden" name="action" value="complete">
-                <button type="submit" class="challenge-button">Complete Challenge</button>
+                <button type="submit" class="challenge-button" id="complete-button">Complete Challenge</button>
             </form>
             {% if message %}
                 <p class="success-message">{{ message }}</p>
@@ -25,12 +25,23 @@
     </section>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // Style task titles
             const taskParas = document.querySelectorAll('.challenge-content p');
             taskParas.forEach(p => {
                 if (/^Task \d+:/.test(p.textContent.trim())) {
                     p.innerHTML = `<span class="challenge-task-title">${p.innerHTML}</span>`;
                 }
             });
+
+            // Handle form submission
+            const form = document.getElementById('challenge-form');
+            const button = document.getElementById('complete-button');
+            if (form && button) {
+                form.addEventListener('submit', () => {
+                    button.disabled = true;
+                    button.innerText = 'Completing...';
+                });
+            }
         });
     </script>
 {% endblock %}

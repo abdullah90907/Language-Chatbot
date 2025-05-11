@@ -1,10 +1,12 @@
-from flask import Flask, render_template, request, session, redirect, url_for
+from flask import Flask, render_template, request, session, redirect, url_for, jsonify
 from flask import send_from_directory
 from groq import Groq
 import os
 import markdown
 from datetime import datetime, date
 import re
+import random
+import time
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)  # Required for session management
@@ -63,16 +65,16 @@ def generate_daily_challenge(language, level, day_number):
     """
     return get_ai_response(prompt, language, level)
 
-# Quiz question generator
-def get_quiz_question(language, level):
-    prompt = f"Generate a multiple-choice quiz question for {language} at {level} level."
-    response = get_ai_response(prompt, language, level)
-    # Mock parsing (adjust based on actual AI response format)
-    return {
-        "question": response,
-        "options": ["Option 1", "Option 2", "Option 3", "Option 4"],
-        "correct_answer": "Option 1"  # Replace with logic to extract correct answer
-    }
+# # Quiz question generator
+# def get_quiz_question(language, level):
+#     prompt = f"Generate a multiple-choice quiz question for {language} at {level} level."
+#     response = get_ai_response(prompt, language, level)
+#     # Mock parsing (adjust based on actual AI response format)
+#     return {
+#         "question": response,
+#         "options": ["Option 1", "Option 2", "Option 3", "Option 4"],
+#         "correct_answer": "Option 1"  # Replace with logic to extract correct answer
+#     }
 
 # Home route
 @app.route('/', methods=['GET', 'POST'])
@@ -103,8 +105,14 @@ def learn():
         session['language'] = 'English'
     if 'level' not in session:
         session['level'] = 'Beginner'
-    if 'challenge_day' not in session:
+    
+    # Reset challenge_day to 1 on GET (page load or reload)
+    if request.method == 'GET':
         session['challenge_day'] = 1
+        session.modified = True
+    elif 'challenge_day' not in session:
+        session['challenge_day'] = 1
+        session.modified = True
 
     challenge = None
     challenge_html = None
@@ -112,14 +120,18 @@ def learn():
 
     if request.method == 'POST' and request.form.get('action') == 'complete':
         # Increment challenge day and generate new challenge
-        session['challenge_day'] += 1
+        session['challenge_day'] = session.get('challenge_day', 1) + 1
         challenge = generate_daily_challenge(session['language'], session['level'], session['challenge_day'])
         challenge_html = markdown.markdown(challenge)
         message = "Great job! Here's your next challenge!"
+        print(f"Challenge Completed - Day: {session['challenge_day']}, Challenge: {challenge}")
     else:
         # Generate current challenge
         challenge = generate_daily_challenge(session['language'], session['level'], session['challenge_day'])
         challenge_html = markdown.markdown(challenge)
+        print(f"Challenge Loaded - Day: {session['challenge_day']}, Challenge: {challenge}")
+
+    print("Session:", session)
 
     return render_template(
         'learn.html',
@@ -179,15 +191,23 @@ def quiz():
         session['level'] = 'Beginner'
     if 'quiz_data' not in session:
         session['quiz_data'] = {}
+    if 'quiz_answered' not in session:
+        session['quiz_answered'] = False
+    if 'quiz_result' not in session:
+        session['quiz_result'] = None
 
     error_message = None
 
     def generate_new_question():
         nonlocal error_message
         try:
-            # Add timestamp and random seed for unique prompt
+            # Add random seed and varied topics for unique prompt
+            random_seed = random.randint(1, 1000000)
+            topics = ['vocabulary', 'grammar', 'phrases', 'culture', 'common expressions']
+            topic = random.choice(topics)
             prompt = f"""
                 Generate a multiple-choice quiz question for {session['language']} at {session['level']} level in Markdown.
+                Focus on {topic} to ensure variety.
                 Structure it exactly as:
                 - Question: [Question text]
                 - Options:
@@ -196,7 +216,7 @@ def quiz():
                   3. [Option 3]
                   4. [Option 4]
                 - Correct answer: [Option text]
-                Ensure the question is engaging, relevant, factually accurate, and the correct answer is the exact text of one option (e.g., 'Hello', not '1'). Use numbered options (1., 2., 3., 4.) without bullets or dashes. Generate a new, unique question each time. Timestamp: {time.time()}
+                Ensure the question is engaging, relevant, factually accurate, and the correct answer is the exact text of one option (e.g., 'Hello', not '1'). Use numbered options (1., 2., 3., 4.) without bullets or dashes. Generate a new, unique question different from previous ones. Seed: {random_seed}, Timestamp: {time.time()}
                 """
             response = get_ai_response(prompt, session['language'], session['level'])
             print("Quiz Response:", response)
@@ -206,7 +226,7 @@ def quiz():
             options_match = re.findall(r'^\s*\d+\.\s*(.*?)$', response, re.MULTILINE)
             correct_answer_match = re.search(r'^- Correct answer: (.*)$', response, re.MULTILINE)
             
-            # Fallback parsing for irregular formats
+            # Fallback parsing
             lines = response.strip().split('\n')
             if not question_match:
                 question = next((line.strip() for line in lines if line.strip() and not line.startswith(('1.', '2.', '3.', '4.', '- ', '* ', 'Correct answer:'))), "Unknown question")
@@ -242,72 +262,86 @@ def quiz():
                 'correct_answer': correct_answer
             }
             print("Generated Quiz Data:", quiz_data)
-            session['quiz_data'] = quiz_data
-            session['quiz_answered'] = False
-            session.modified = True
             return quiz_data
         except Exception as e:
             error_message = f"Failed to generate question: {str(e)}"
             print("Quiz Generation Error:", error_message)
-            # Fallback question
-            quiz_data = {
-                'question': f"What is a common greeting in {session['language']}?",
-                'question_html': markdown.markdown(f"What is a common greeting in {session['language']}?"),
-                'options': ['Hello', 'Goodbye', 'Thank you', 'Please'],
-                'correct_answer': 'Hello'
-            }
-            session['quiz_data'] = quiz_data
-            session['quiz_answered'] = False
-            session.modified = True
+            # Varied fallback questions
+            fallback_questions = [
+                {
+                    'question': f"What is the opposite of the word 'big' in {session['language']}?",
+                    'options': ['Happy', 'Small', 'Fast', 'Strong'],
+                    'correct_answer': 'Small'
+                },
+                {
+                    'question': f"How do you say 'thank you' in {session['language']}?",
+                    'options': ['Hello', 'Thank you', 'Goodbye', 'Please'],
+                    'correct_answer': 'Thank you'
+                },
+                {
+                    'question': f"What is a common greeting in {session['language']}?",
+                    'options': ['Hello', 'Goodbye', 'Thank you', 'Please'],
+                    'correct_answer': 'Hello'
+                }
+            ]
+            quiz_data = random.choice(fallback_questions)
+            quiz_data['question_html'] = markdown.markdown(quiz_data['question'])
+            print("Fallback Quiz Data:", quiz_data)
             return quiz_data
 
     quiz_data = session.get('quiz_data', {})
     answered = session.get('quiz_answered', False)
     result = session.get('quiz_result', None)
 
-    # Clear error_message on GET to avoid initial error display
+    # Clear error_message on GET
     if request.method == 'GET':
         error_message = None
+        # Force new question on page load to avoid static question
+        if quiz_data.get('question') == f"What is the opposite of the word 'big' in {session['language']}?":
+            quiz_data = {}
+            session['quiz_data'] = {}
 
     if request.method == 'POST':
         action = request.form.get('action')
         print("POST Action:", action)
+        print("Form Data:", request.form)
         if action == 'next':
+            # Clear session to force new question
+            session['quiz_data'] = {}
+            session['quiz_answered'] = False
+            session['quiz_result'] = None
             quiz_data = generate_new_question()
-            if quiz_data:
-                session['quiz_data'] = quiz_data
-                answered = False
-                result = None
-                session['quiz_answered'] = False
-                session['quiz_result'] = None
-                session.modified = True
-            else:
-                error_message = "Failed to generate new question."
-            return redirect(url_for('quiz'))
+            session['quiz_data'] = quiz_data
+            session.modified = True
+            print("After Next - Session:", session)
         elif action == 'submit':
             user_answer = request.form.get('answer')
-            if user_answer and quiz_data and 'correct_answer' in quiz_data:
+            print("User Answer:", user_answer)
+            print("Current Quiz Data:", quiz_data)
+            if user_answer and quiz_data and 'correct_answer' in quiz_data and user_answer in quiz_data['options']:
                 answered = True
                 result = user_answer == quiz_data['correct_answer']
                 session['quiz_answered'] = True
                 session['quiz_result'] = result
                 session.modified = True
             else:
-                error_message = "Invalid answer or question data missing."
+                error_message = "Please select a valid answer."
                 answered = False
                 result = None
                 session['quiz_answered'] = False
                 session['quiz_result'] = None
                 session.modified = True
-            return redirect(url_for('quiz'))  # Redirect to ensure state refresh
+            print("After Submit - Session:", session)
 
-    # Generate new question on GET if none exists, invalid, or empty question
+    # Generate new question if none exists or invalid
     if not quiz_data or not all(key in quiz_data for key in ['question', 'options', 'correct_answer']) or not quiz_data.get('question'):
         quiz_data = generate_new_question()
         session['quiz_data'] = quiz_data
+        session['quiz_answered'] = False
+        session['quiz_result'] = None
         session.modified = True
 
-    print("Quiz Data:", quiz_data, "Answered:", answered, "Result:", result)
+    print("Final Quiz Data:", quiz_data, "Answered:", answered, "Result:", result)
 
     return render_template(
         'quiz.html',

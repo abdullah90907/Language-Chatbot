@@ -19,18 +19,18 @@
                             <h3>Question:</h3>
                             {{ quiz_data.question_html | safe }}
                         </div>
-                        <form method="POST" action="{{ url_for('quiz') }}">
+                        <form id="quiz-form" method="POST" action="{{ url_for('quiz') }}">
                             <input type="hidden" name="action" value="submit">
                             {% for option in quiz_data.options %}
                                 <label class="quiz-option">
-                                    <input type="radio" name="answer" value="{{ option }}" required>
-                                    {{ option }}
+                                    <input type="radio" name="answer" value="{{ option | e }}" required>
+                                    {{ option | e }}
                                 </label>
                             {% endfor %}
-                            <button type="submit" class="quiz-button">Submit Answer</button>
+                            <button type="submit" class="quiz-button" id="submit-button">Submit Answer</button>
                         </form>
                     </div>
-                    {% if answered %}
+                    {% if answered and quiz_data %}
                         <div class="quiz-result">
                             {% if result is not none %}
                                 {% if result %}
@@ -41,17 +41,17 @@
                             {% else %}
                                 <p class="error-message">Result not available. Please try again.</p>
                             {% endif %}
-                            <form method="POST" action="{{ url_for('quiz') }}">
+                            <form id="next-form" method="POST" action="{{ url_for('quiz') }}">
                                 <input type="hidden" name="action" value="next">
-                                <button type="submit" class="quiz-button">Next Question</button>
+                                <button type="submit" class="quiz-button" id="next-button">Next Question</button>
                             </form>
                         </div>
                     {% endif %}
                 {% else %}
-                    <p>Unable to load question. Please try again!</p>
+                    <p>Loading question, please wait...</p>
                     <form method="POST" action="{{ url_for('quiz') }}">
                         <input type="hidden" name="action" value="next">
-                        <button type="submit" class="quiz-button">Load Question</button>
+                        <button type="submit" class="quiz-button">Try Again</button>
                     </form>
                 {% endif %}
                 {% if error_message %}
@@ -60,4 +60,34 @@
             </div>
         </div>
     </section>
+
+<script>
+    // Handle form submission and button states
+    document.addEventListener('DOMContentLoaded', () => {
+        const quizForm = document.getElementById('quiz-form');
+        const nextForm = document.getElementById('next-form');
+        const submitButton = document.getElementById('submit-button');
+        const nextButton = document.getElementById('next-button');
+
+        if (quizForm) {
+            // Clear radio buttons on load
+            quizForm.reset();
+
+            // Handle submit
+            quizForm.addEventListener('submit', () => {
+                if (submitButton) {
+                    submitButton.disabled = true;
+                    submitButton.innerText = 'Submitting...';
+                }
+            });
+        }
+
+        if (nextForm && nextButton) {
+            nextForm.addEventListener('submit', () => {
+                nextButton.disabled = true;
+                nextButton.innerText = 'Loading Next...';
+            });
+        }
+    });
+</script>
 {% endblock %}
