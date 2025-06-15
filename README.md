@@ -1,5 +1,3 @@
-![LangMaster Pro Banner](image/home-readne.png)
-
 # LangMaster Pro
 
 A comprehensive language learning application built with Flask, featuring AI-powered conversations, daily challenges, quizzes, and practice exercises.
