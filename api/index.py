@@ -419,5 +419,6 @@ def image(filename):
 # For Vercel deployment
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 
+# For local development
 if __name__ == '__main__':
     app.run(debug=True)
