@@ -414,11 +414,7 @@ def chat():
 
 @app.route('/image/<filename>')
 def image(filename):
-    return send_from_directory('image', filename)
+    return send_from_directory('../image', filename)
 
-# For Vercel deployment
-app.config['TEMPLATES_AUTO_RELOAD'] = True
-
-# For local development
-if __name__ == '__main__':
-    app.run(debug=True)
+# For Vercel deployment - expose the Flask app directly
+# Vercel will automatically detect the 'app' variable
