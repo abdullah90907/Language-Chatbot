@@ -4,42 +4,204 @@
 
 {% block content %}
     <!-- Learning Center Section -->
-    <section class="learning-center">
-        <h1>📚 Learning Center</h1>
-        <div class="challenge-container">
-            <h2>🎯 Daily Challenge for {{ languages[selected_language] }}</h2>
-            <div class="challenge-content">
-                <div class="challenge-image">
-                    <img src="{{ url_for('image', filename='learn.jpg') }}" alt="Daily Challenge Image">
-                </div>
-                <div>{{ challenge_html | safe }}</div>
+    <section class="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 py-12 relative overflow-hidden">
+        <!-- Background Effects -->
+        <div class="absolute inset-0 opacity-10">
+            <div class="absolute top-20 left-10 w-64 h-64 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full animate-pulse-slow"></div>
+            <div class="absolute bottom-20 right-20 w-48 h-48 bg-gradient-to-r from-green-400 to-cyan-500 rounded-full animate-pulse-slow"></div>
+            <div class="absolute top-1/2 left-1/4 w-32 h-32 bg-gradient-to-r from-pink-400 to-orange-500 rounded-full animate-pulse-slow"></div>
+        </div>
+        
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">            <!-- Header -->
+            <div class="text-center mb-12 animate-fade-in">
+                <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-4">
+                    📚 Learning Center
+                </h1>
+                <p class="text-lg md:text-xl text-gray-600 font-medium">Master {{ languages[selected_language] }} with interactive daily challenges</p>
             </div>
-            <form id="challenge-form" method="POST" action="{{ url_for('learn') }}">
-                <input type="hidden" name="action" value="complete">
-                <button type="submit" class="challenge-button" id="complete-button">Complete Challenge</button>
-            </form>
-            {% if message %}
-                <p class="success-message">{{ message }}</p>
-            {% endif %}
+            
+            <!-- Challenge Container -->
+            <div class="bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl border border-white/20 overflow-hidden animate-fade-in delay-200">
+                <!-- Challenge Header -->                <div class="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 p-8 text-white">
+                    <h2 class="text-2xl md:text-3xl font-bold text-center mb-2">
+                        🎯 Daily Challenge
+                    </h2>
+                    <p class="text-center text-lg md:text-xl opacity-90">{{ languages[selected_language] }} Learning Journey</p>
+                </div>
+                
+                <!-- Challenge Content -->
+                <div class="p-8 md:p-12">
+                    <div class="grid md:grid-cols-2 gap-8 items-start">
+                        <!-- Challenge Image -->
+                        <div class="relative group">
+                            <div class="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 rounded-2xl transform rotate-3 group-hover:rotate-6 transition-transform duration-300"></div>
+                            <img src="{{ url_for('image', filename='learn.jpg') }}" alt="Daily Challenge" 
+                                 class="relative w-full h-80 object-cover rounded-2xl shadow-xl transform group-hover:scale-105 transition-transform duration-300">
+                            <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-full p-3 shadow-lg">
+                                <span class="text-2xl">🌟</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Challenge Text -->
+                        <div class="challenge-content space-y-6">
+                            <div class="prose prose-lg max-w-none">
+                                {{ challenge_html | safe }}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Challenge Button -->
+                    <div class="mt-12 text-center">
+                        <form id="challenge-form" method="POST" action="{{ url_for('learn') }}">
+                            <input type="hidden" name="action" value="complete">
+                            <button type="submit" 
+                                    class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-green-500 via-blue-500 to-purple-500 text-white text-xl font-bold rounded-full shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 animate-pulse-slow" 
+                                    id="complete-button">
+                                <span class="mr-3">✅</span>
+                                Complete Challenge
+                                <span class="ml-3">🚀</span>
+                            </button>
+                        </form>
+                        
+                        {% if message %}
+                            <div class="mt-6 p-4 bg-gradient-to-r from-green-100 to-emerald-100 border border-green-200 rounded-2xl animate-fade-in">
+                                <p class="text-green-800 font-semibold text-lg">🎉 {{ message }}</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Progress Stats -->
+            <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 animate-fade-in delay-400">
+                <div class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl p-6 text-center border border-white/20">
+                    <div class="text-3xl mb-2">📈</div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Progress Tracking</h3>
+                    <p class="text-gray-600">Monitor your daily achievements</p>
+                </div>
+                <div class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl p-6 text-center border border-white/20">
+                    <div class="text-3xl mb-2">🎖️</div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Achievement System</h3>
+                    <p class="text-gray-600">Earn badges as you progress</p>
+                </div>
+                <div class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl p-6 text-center border border-white/20">
+                    <div class="text-3xl mb-2">🔥</div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Streak Counter</h3>
+                    <p class="text-gray-600">Build daily learning habits</p>
+                </div>
+            </div>
         </div>
     </section>
+
+    <!-- Enhanced CSS for Learn Page -->
+    <style>
+        /* Custom animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animate-fade-in {
+            animation: fadeIn 1s ease-out forwards;
+        }
+        
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-400 { animation-delay: 0.4s; }
+        
+        @keyframes pulseSlow {
+            0%, 100% { opacity: 0.6; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.05); }
+        }
+        
+        .animate-pulse-slow {
+            animation: pulseSlow 4s ease-in-out infinite;
+        }
+          /* Challenge content styling */
+        .challenge-content h1 {
+            font-size: 1.875rem;
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, #2563eb, #9333ea);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .challenge-content h2 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #374151;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .challenge-content h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.5rem;
+            margin-top: 1.5rem;
+            padding: 0.75rem;
+            background: linear-gradient(to right, #dbeafe, #f3e8ff);
+            border-radius: 0.5rem;
+            border-left: 4px solid #3b82f6;
+        }
+        
+        .challenge-content ul, .challenge-content ol {
+            margin-left: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .challenge-content li {
+            color: #374151;
+            font-size: 1.125rem;
+            line-height: 1.75;
+            margin-bottom: 0.5rem;
+        }
+        
+        .challenge-content p {
+            color: #374151;
+            font-size: 1.125rem;
+            line-height: 1.75;
+            margin-bottom: 1rem;
+        }
+        
+        /* Backdrop blur support */
+        .backdrop-blur-sm {
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+        }
+        
+        /* Gradient text support */
+        .bg-clip-text {
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Style task titles
-            const taskParas = document.querySelectorAll('.challenge-content p');
-            taskParas.forEach(p => {
-                if (/^Task \d+:/.test(p.textContent.trim())) {
-                    p.innerHTML = `<span class="challenge-task-title">${p.innerHTML}</span>`;
+            // Enhanced task title styling
+            const taskHeaders = document.querySelectorAll('.challenge-content h3');
+            taskHeaders.forEach((header, index) => {
+                if (header.textContent.includes('Task')) {
+                    const colors = ['blue', 'green', 'purple', 'pink', 'orange'];
+                    const color = colors[index % colors.length];
+                    header.classList.add(`border-${color}-500`, `from-${color}-50`, `to-${color}-100`);
                 }
             });
 
-            // Handle form submission
+            // Handle form submission with enhanced feedback
             const form = document.getElementById('challenge-form');
             const button = document.getElementById('complete-button');
             if (form && button) {
                 form.addEventListener('submit', () => {
                     button.disabled = true;
-                    button.innerText = 'Completing...';
+                    button.innerHTML = '<span class="mr-3">⏳</span>Completing Challenge...<span class="ml-3">✨</span>';
+                    button.classList.add('opacity-75', 'cursor-not-allowed');
                 });
             }
         });

@@ -3,30 +3,256 @@
 {% block title %}Practice - {{ languages[selected_language] }}{% endblock %}
 
 {% block content %}
-    <!-- Practice Zone Section -->
-    <section class="practice-zone">
-        <h1>✍️ Practice Zone</h1>
-        <div class="practice-container">
-            <h2>📝 Write in {{ languages[selected_language] }}</h2>
-            <div class="practice-content">
-                <div class="practice-image">
-                    <!-- Placeholder for image -->
-                    <img src="{{ url_for('image', filename='practice.jpg') }}" alt="Practice Image">
+    <!-- Practice Section -->
+    <section class="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 py-12 relative overflow-hidden">
+        <!-- Background Effects -->
+        <div class="absolute inset-0 opacity-10">
+            <div class="absolute top-20 left-20 w-56 h-56 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full animate-pulse-slow"></div>
+            <div class="absolute bottom-16 right-16 w-40 h-40 bg-gradient-to-r from-teal-400 to-cyan-500 rounded-full animate-pulse-slow"></div>
+            <div class="absolute top-1/3 right-1/4 w-32 h-32 bg-gradient-to-r from-lime-400 to-green-500 rounded-full animate-pulse-slow"></div>
+        </div>
+        
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">            <!-- Header -->
+            <div class="text-center mb-12 animate-fade-in">
+                <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-green-600 via-emerald-600 to-teal-600 bg-clip-text text-transparent mb-4">
+                    ✍️ Practice Zone
+                </h1>
+                <p class="text-lg md:text-xl text-gray-600 font-medium">Improve your {{ languages[selected_language] }} writing skills with AI feedback</p>
+            </div>
+            
+            <!-- Practice Container -->
+            <div class="bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl border border-white/20 overflow-hidden animate-fade-in delay-200">
+                <!-- Practice Header -->                <div class="bg-gradient-to-r from-green-500 via-emerald-500 to-teal-500 p-8 text-white">
+                    <h2 class="text-2xl md:text-3xl font-bold text-center mb-2">
+                        📝 Writing Practice
+                    </h2>
+                    <p class="text-center text-xl opacity-90">Express yourself in {{ languages[selected_language] }}</p>
                 </div>
-                <form method="POST" action="{{ url_for('practice') }}">
-                    <textarea name="writing_input" placeholder="Write a sentence or short text in {{ languages[selected_language] }}..." required>{{ user_input or '' }}</textarea>
-                    <button type="submit" class="practice-button">Submit for Feedback</button>
-                </form>
-                {% if error_message %}
-                    <p class="error-message">{{ error_message }}</p>
-                {% endif %}
-                {% if feedback_html %}
-                    <div class="feedback-text">
-                        <h3>Your Feedback:</h3>
-                        {{ feedback_html | safe }}
+                
+                <!-- Practice Content -->
+                <div class="p-8 md:p-12">
+                    <div class="grid md:grid-cols-2 gap-8 items-start">
+                        <!-- Practice Image -->
+                        <div class="relative group">
+                            <div class="absolute inset-0 bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl transform -rotate-2 group-hover:-rotate-6 transition-transform duration-300"></div>
+                            <img src="{{ url_for('image', filename='practice.jpg') }}" alt="Writing Practice" 
+                                 class="relative w-full h-80 object-cover rounded-2xl shadow-xl transform group-hover:scale-105 transition-transform duration-300">
+                            <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-full p-3 shadow-lg">
+                                <span class="text-2xl">✏️</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Practice Form -->
+                        <div class="space-y-6">
+                            <div class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl p-6 border-l-4 border-green-500">
+                                <h3 class="text-2xl font-bold text-green-800 mb-4 flex items-center">
+                                    <span class="mr-3">💡</span>Writing Prompt
+                                </h3>
+                                <p class="text-green-700 text-lg leading-relaxed">
+                                    Write anything in {{ languages[selected_language] }} - a story, description, dialogue, or thoughts. 
+                                    Our AI will provide personalized feedback to help you improve!
+                                </p>
+                            </div>
+                            
+                            <form method="POST" action="{{ url_for('practice') }}" class="space-y-6" id="practice-form">
+                                <div class="relative">
+                                    <textarea name="writing_input" 
+                                              placeholder="Start writing in {{ languages[selected_language] }}... ✍️" 
+                                              required 
+                                              rows="8"
+                                              class="w-full p-6 border-2 border-gray-200 rounded-2xl focus:border-green-500 focus:ring-4 focus:ring-green-200 transition-all duration-300 resize-none text-lg bg-white/80 backdrop-blur-sm shadow-lg"
+                                              id="writing-input">{{ user_input or '' }}</textarea>
+                                    <div class="absolute bottom-4 right-4 flex items-center space-x-2 text-gray-400">
+                                        <span>📊</span>
+                                        <span class="text-sm" id="char-count">0 characters</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex justify-center">
+                                    <button type="submit" 
+                                            class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-green-500 via-emerald-500 to-teal-500 text-white text-xl font-bold rounded-full shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 animate-pulse-slow"
+                                            id="submit-button">
+                                        <span class="mr-3">🚀</span>
+                                        Get AI Feedback
+                                        <span class="ml-3">🔍</span>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                {% endif %}
+                    
+                    <!-- Error Message -->
+                    {% if error_message %}
+                        <div class="mt-8 p-4 bg-gradient-to-r from-red-100 to-pink-100 border border-red-200 rounded-2xl animate-fade-in">
+                            <p class="text-red-800 font-semibold text-lg flex items-center">
+                                <span class="mr-3">⚠️</span>
+                                {{ error_message }}
+                            </p>
+                        </div>
+                    {% endif %}
+                    
+                    <!-- Feedback Section -->
+                    {% if feedback_html %}
+                        <div class="mt-12 animate-fade-in">
+                            <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-8 border-l-4 border-blue-500 shadow-xl">
+                                <h3 class="text-3xl font-bold text-blue-800 mb-6 flex items-center">
+                                    <span class="mr-3">🎯</span>Your AI Feedback
+                                </h3>
+                                <div class="feedback-content prose prose-lg max-w-none">
+                                    {{ feedback_html | safe }}
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- Practice Features -->
+            <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 animate-fade-in delay-400">
+                <div class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl p-6 text-center border border-white/20">
+                    <div class="text-3xl mb-2">🎨</div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Creative Writing</h3>
+                    <p class="text-gray-600">Express your creativity freely</p>
+                </div>
+                <div class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl p-6 text-center border border-white/20">
+                    <div class="text-3xl mb-2">📚</div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Grammar Check</h3>
+                    <p class="text-gray-600">Instant grammar corrections</p>
+                </div>
+                <div class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl p-6 text-center border border-white/20">
+                    <div class="text-3xl mb-2">💡</div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Style Tips</h3>
+                    <p class="text-gray-600">Improve your writing style</p>
+                </div>
             </div>
         </div>
     </section>
+
+    <!-- Enhanced CSS for Practice Page -->
+    <style>
+        /* Custom animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animate-fade-in {
+            animation: fadeIn 1s ease-out forwards;
+        }
+        
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-400 { animation-delay: 0.4s; }
+        
+        @keyframes pulseSlow {
+            0%, 100% { opacity: 0.6; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.05); }
+        }
+        
+        .animate-pulse-slow {
+            animation: pulseSlow 4s ease-in-out infinite;
+        }
+        
+        /* Feedback content styling */
+        .feedback-content h1, .feedback-content h2, .feedback-content h3 {
+            color: #1e40af !important;
+            margin-bottom: 1rem;
+        }
+        
+        .feedback-content p {
+            color: #374151 !important;
+            font-size: 1.125rem;
+            line-height: 1.75;
+            margin-bottom: 1rem;
+        }
+        
+        .feedback-content strong {
+            color: #059669;
+            font-weight: 600;
+        }
+        
+        .feedback-content ul, .feedback-content ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .feedback-content li {
+            color: #374151 !important;
+            margin-bottom: 0.5rem;
+            font-size: 1.125rem;
+            line-height: 1.75;
+        }
+        
+        /* Textarea focus effects */
+        #writing-input:focus {
+            transform: translateY(-2px);
+        }
+        
+        /* Backdrop blur support */
+        .backdrop-blur-sm {
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+        }
+        
+        /* Gradient text support */
+        .bg-clip-text {
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const writingInput = document.getElementById('writing-input');
+            const submitButton = document.getElementById('submit-button');
+            const practiceForm = document.getElementById('practice-form');
+            const charCount = document.getElementById('char-count');
+            
+            // Character counter
+            if (writingInput && charCount) {
+                const updateCharCount = () => {
+                    const count = writingInput.value.length;
+                    charCount.textContent = `${count} characters`;
+                    
+                    // Color coding
+                    if (count < 50) {
+                        charCount.className = 'text-sm text-gray-400';
+                    } else if (count < 200) {
+                        charCount.className = 'text-sm text-blue-500';
+                    } else {
+                        charCount.className = 'text-sm text-green-500';
+                    }
+                };
+                
+                writingInput.addEventListener('input', updateCharCount);
+                updateCharCount(); // Initial call
+                
+                // Auto-resize textarea
+                writingInput.addEventListener('input', () => {
+                    writingInput.style.height = 'auto';
+                    writingInput.style.height = Math.min(writingInput.scrollHeight, 300) + 'px';
+                });
+            }
+            
+            // Enhanced form submission
+            if (practiceForm && submitButton) {
+                practiceForm.addEventListener('submit', (e) => {
+                    const text = writingInput.value.trim();
+                    if (!text) {
+                        e.preventDefault();
+                        return;
+                    }
+                    
+                    submitButton.disabled = true;
+                    submitButton.innerHTML = '<span class="mr-3">⏳</span>Analyzing...<span class="ml-3">🔍</span>';
+                    submitButton.classList.add('opacity-75', 'cursor-not-allowed');
+                });
+            }
+            
+            // Auto-focus on input
+            if (writingInput && !writingInput.value) {
+                writingInput.focus();
+            }
+        });
+    </script>
 {% endblock %}

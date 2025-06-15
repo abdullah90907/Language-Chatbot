@@ -9,10 +9,12 @@ import random
 import time
 
 app = Flask(__name__)
-app.secret_key = os.urandom(24)  # Required for session management
+app.secret_key = os.environ.get('SECRET_KEY', 'your-secret-key-here-change-in-production')
 
-# Initialize Groq client with environment variable
-client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+# Initialize Groq client with API key
+# First try environment variable, then fallback to hardcoded (not recommended for production)
+GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "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")
+client = Groq(api_key=GROQ_API_KEY)
 
 # Language configurations
 LANGUAGES = {
@@ -411,5 +413,12 @@ def chat():
 def image(filename):
     return send_from_directory('image', filename)
 
+# For Vercel deployment
+app.config['TEMPLATES_AUTO_RELOAD'] = True
+
 if __name__ == '__main__':
     app.run(debug=True)
+
+# Export app for Vercel
+def handler(request):
+    return app(request.environ, request.start_response)

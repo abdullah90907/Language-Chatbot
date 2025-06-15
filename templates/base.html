@@ -2,53 +2,253 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <title>{% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="icon" type="image/png" href="{{ url_for('image', filename='worldwide.png') }}">
     <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('image', filename='worldwide.ico') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .font-poppins {
             font-family: 'Poppins', sans-serif;
         }
+        .font-inter {
+            font-family: 'Inter', sans-serif;
+        }        /* Enhanced Navbar Styling */
+        .navbar-blur {
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+        }
+        
+        /* Mobile Navigation */
+        .mobile-menu {
+            display: none;
+        }
+        
+        .mobile-menu.active {
+            display: block;
+        }
+        
+        @media (max-width: 1024px) {
+            .desktop-nav {
+                display: none;
+            }
+            
+            .mobile-menu-button {
+                display: block;
+            }
+        }
+        
+        @media (min-width: 1025px) {
+            .mobile-menu-button {
+                display: none;
+            }
+        }/* Smooth transitions */
+        * {
+            transition: all 0.3s ease;
+        }
+          /* Enhanced Navbar Link Styles */
+        .nav-link-modern {
+            position: relative;
+            display: inline-block;
+            padding: 8px 16px;
+            margin: 0 2px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            color: #374151;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+        }
+        
+        @media (min-width: 1024px) {
+            .nav-link-modern {
+                padding: 12px 20px;
+                margin: 0 4px;
+                border-radius: 16px;
+                font-size: 1.125rem;
+            }
+        }
+        
+        .nav-text {
+            position: relative;
+            z-index: 2;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-link-modern::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 16px;
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1;
+        }
+        
+        .nav-link-modern:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .nav-link-modern:hover .nav-text {
+            color: white;
+        }
+        
+        .nav-link-modern:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Individual color themes */
+        .home-link::before {
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+        }
+        
+        .learn-link::before {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+        
+        .quiz-link::before {
+            background: linear-gradient(135deg, #8b5cf6, #ec4899);
+        }
+        
+        .chat-link::before {
+            background: linear-gradient(135deg, #f59e0b, #ef4444);
+        }
+        
+        .practice-link::before {
+            background: linear-gradient(135deg, #f97316, #dc2626);
+        }
     </style>
 </head>
-<body class="bg-gray-100">
-    <nav class="bg-white shadow-md">
+<body class="bg-gradient-to-br from-slate-50 to-blue-50 font-inter">    <nav class="navbar-blur shadow-lg border-b border-white/20 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <ul class="flex justify-between items-center py-4">
-                <li class="flex items-center mr-6">
-                    <a href="{{ url_for('home') }}" class="flex items-center space-x-2">
-                        <span class="text-4xl leading-none">🌍</span>
-                        <span class="text-gray-900 font-bold text-xl font-poppins hidden sm:inline">LangMaster Pro</span>
+            <div class="flex justify-between items-center py-4">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <a href="{{ url_for('home') }}" class="flex items-center space-x-3 group">
+                        <div class="relative">
+                            <span class="text-3xl md:text-4xl leading-none group-hover:scale-110 transition-transform duration-300">🌍</span>
+                            <div class="absolute -top-1 -right-1 w-3 h-3 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full animate-pulse"></div>
+                        </div>
+                        <span class="text-gray-900 font-bold text-xl md:text-2xl font-poppins bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                            LangMaster Pro
+                        </span>
                     </a>
-                </li>
-                <div class="flex space-x-4">
-                    <li><a href="{{ url_for('home') }}" class="text-gray-900 hover:text-green-500 font-bold text-lg font-poppins transition">Home</a></li>
-                    <li><a href="{{ url_for('learn') }}" class="text-gray-900 hover:text-green-500 font-bold text-lg font-poppins transition">Learn</a></li>
-                    <li><a href="{{ url_for('quiz') }}" class="text-gray-900 hover:text-green-500 font-bold text-lg font-poppins transition">Quiz</a></li>
-                    <li><a href="{{ url_for('chat') }}" class="text-gray-900 hover:text-green-500 font-bold text-lg font-poppins transition">Chat</a></li>
-                    <li><a href="{{ url_for('practice') }}" class="text-gray-900 hover:text-green-500 font-bold text-lg font-poppins transition">Practice</a></li>
                 </div>
-                <li>
-                    <form method="POST" action="{{ url_for('home') }}" class="flex space-x-2">
-                        <select name="language" onchange="this.form.submit()" class="border rounded px-2 py-1 text-gray-900 font-medium text-base font-poppins bg-white">
+
+                <!-- Desktop Navigation -->
+                <div class="desktop-nav hidden lg:flex space-x-1">
+                    <a href="{{ url_for('home') }}" class="nav-link-modern home-link">
+                        <span class="nav-text">🏠 Home</span>
+                    </a>
+                    <a href="{{ url_for('learn') }}" class="nav-link-modern learn-link">
+                        <span class="nav-text">📚 Learn</span>
+                    </a>
+                    <a href="{{ url_for('quiz') }}" class="nav-link-modern quiz-link">
+                        <span class="nav-text">🧠 Quiz</span>
+                    </a>
+                    <a href="{{ url_for('chat') }}" class="nav-link-modern chat-link">
+                        <span class="nav-text">💬 Chat</span>
+                    </a>
+                    <a href="{{ url_for('practice') }}" class="nav-link-modern practice-link">
+                        <span class="nav-text">✍️ Practice</span>
+                    </a>
+                </div>
+
+                <!-- Controls (Language/Level selectors) -->
+                <div class="flex items-center space-x-3">
+                    <form method="POST" action="{{ url_for('home') }}" class="hidden md:flex space-x-3">
+                        <select name="language" onchange="this.form.submit()" class="border-2 border-gray-200 rounded-xl px-3 py-2 text-sm md:px-4 md:py-2 md:text-base text-gray-800 font-medium font-poppins bg-white/80 backdrop-blur-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 hover:border-blue-400">
                             {% for lang in languages %}
                                 <option value="{{ lang }}" {% if lang == selected_language %}selected{% endif %}>{{ languages[lang] }}</option>
                             {% endfor %}
                         </select>
-                        <select name="level" onchange="this.form.submit()" class="border rounded px-2 py-1 text-gray-900 font-medium text-base font-poppins bg-white">
-                            <option value="Beginner" {% if selected_level == 'Beginner' %}selected{% endif %}>Beginner</option>
-                            <option value="Intermediate" {% if selected_level == 'Intermediate' %}selected{% endif %}>Intermediate</option>
-                            <option value="Advanced" {% if selected_level == 'Advanced' %}selected{% endif %}>Advanced</option>
+                        <select name="level" onchange="this.form.submit()" class="border-2 border-gray-200 rounded-xl px-3 py-2 text-sm md:px-4 md:py-2 md:text-base text-gray-800 font-medium font-poppins bg-white/80 backdrop-blur-sm focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all duration-300 hover:border-purple-400">
+                            <option value="Beginner" {% if selected_level == 'Beginner' %}selected{% endif %}>🌱 Beginner</option>
+                            <option value="Intermediate" {% if selected_level == 'Intermediate' %}selected{% endif %}>🌿 Intermediate</option>
+                            <option value="Advanced" {% if selected_level == 'Advanced' %}selected{% endif %}>🌳 Advanced</option>
                         </select>
                     </form>
-                </li>
-            </ul>
+
+                    <!-- Mobile Menu Button -->
+                    <button class="mobile-menu-button lg:hidden p-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors" onclick="toggleMobileMenu()">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Navigation Menu -->
+            <div class="mobile-menu lg:hidden" id="mobileMenu">
+                <div class="py-4 space-y-2 border-t border-gray-200">
+                    <a href="{{ url_for('home') }}" class="block px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors">
+                        🏠 Home
+                    </a>
+                    <a href="{{ url_for('learn') }}" class="block px-4 py-3 text-gray-700 hover:bg-green-50 hover:text-green-600 rounded-lg transition-colors">
+                        📚 Learn
+                    </a>
+                    <a href="{{ url_for('quiz') }}" class="block px-4 py-3 text-gray-700 hover:bg-purple-50 hover:text-purple-600 rounded-lg transition-colors">
+                        🧠 Quiz
+                    </a>
+                    <a href="{{ url_for('chat') }}" class="block px-4 py-3 text-gray-700 hover:bg-orange-50 hover:text-orange-600 rounded-lg transition-colors">
+                        💬 Chat
+                    </a>
+                    <a href="{{ url_for('practice') }}" class="block px-4 py-3 text-gray-700 hover:bg-red-50 hover:text-red-600 rounded-lg transition-colors">
+                        ✍️ Practice
+                    </a>
+                    
+                    <!-- Mobile form controls -->
+                    <div class="px-4 py-3 border-t border-gray-200">
+                        <form method="POST" action="{{ url_for('home') }}" class="space-y-3">
+                            <select name="language" onchange="this.form.submit()" class="w-full border-2 border-gray-200 rounded-xl px-3 py-2 text-gray-800 font-medium bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300">
+                                {% for lang in languages %}
+                                    <option value="{{ lang }}" {% if lang == selected_language %}selected{% endif %}>{{ languages[lang] }}</option>
+                                {% endfor %}
+                            </select>
+                            <select name="level" onchange="this.form.submit()" class="w-full border-2 border-gray-200 rounded-xl px-3 py-2 text-gray-800 font-medium bg-white focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all duration-300">
+                                <option value="Beginner" {% if selected_level == 'Beginner' %}selected{% endif %}>🌱 Beginner</option>
+                                <option value="Intermediate" {% if selected_level == 'Intermediate' %}selected{% endif %}>🌿 Intermediate</option>
+                                <option value="Advanced" {% if selected_level == 'Advanced' %}selected{% endif %}>🌳 Advanced</option>
+                            </select>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
     </nav>
+    
+    <script>
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('active');
+        }
+        
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const menu = document.getElementById('mobileMenu');
+            const button = document.querySelector('.mobile-menu-button');
+            
+            if (!menu.contains(event.target) && !button.contains(event.target)) {
+                menu.classList.remove('active');
+            }
+        });
+        
+        // Close mobile menu when window is resized to desktop
+        window.addEventListener('resize', function() {
+            if (window.innerWidth >= 1024) {
+                document.getElementById('mobileMenu').classList.remove('active');
+            }
+        });
+    </script>
     <main>
         {% block content %}
         {% endblock %}

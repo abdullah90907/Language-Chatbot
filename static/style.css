@@ -624,3 +624,144 @@ body {
     50% { transform: scale(1.1); }
     100% { transform: scale(1); }
 }
+
+/* Mobile Responsiveness Enhancements */
+@media (max-width: 768px) {
+    /* Typography adjustments */
+    .hero h1 {
+        font-size: 2rem;
+        margin-bottom: 0.75rem;
+    }
+    
+    .hero-tagline {
+        font-size: 1rem;
+        margin-bottom: 1rem;
+    }
+    
+    /* Navigation adjustments */
+    .navbar {
+        padding: 0.75rem 1rem;
+    }
+    
+    /* Content spacing */
+    .main-content {
+        padding: 1rem;
+    }
+    
+    .hero {
+        padding: 2rem 1rem;
+    }
+    
+    /* Form elements */
+    .nav-form select {
+        padding: 0.4rem;
+        font-size: 0.9rem;
+    }
+    
+    /* Button adjustments */
+    .cta-button {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.9rem;
+    }
+    
+    /* Cards and containers */
+    .feature-card, .testimonial-card {
+        margin: 0.5rem 0;
+        padding: 1rem;
+    }
+    
+    /* Reduce animations on mobile for better performance */
+    .hover-effect:hover {
+        transform: none;
+    }
+    
+    /* Better touch targets */
+    a, button, select {
+        min-height: 44px;
+        min-width: 44px;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Even smaller screens */
+    .hero h1 {
+        font-size: 1.75rem;
+    }
+    
+    .hero-tagline {
+        font-size: 0.9rem;
+    }
+    
+    .navbar {
+        padding: 0.5rem;
+    }
+    
+    .main-content {
+        padding: 0.75rem;
+    }
+    
+    .hero {
+        padding: 1.5rem 0.75rem;
+    }
+    
+    /* Stack navigation items */
+    .nav-form {
+        flex-direction: column;
+        gap: 0.5rem;
+        width: 100%;
+    }
+    
+    .nav-form select {
+        width: 100%;
+    }
+}
+
+/* Improved touch interactions */
+@media (hover: none) and (pointer: coarse) {
+    /* Touch device optimizations */
+    .nav-link:hover {
+        transform: none;
+        color: #4CAF50;
+        background-color: rgba(76, 175, 80, 0.1);
+    }
+    
+    .cta-button:hover {
+        transform: none;
+        background: linear-gradient(45deg, #45a049, #4CAF50);
+    }
+}
+
+/* Landscape mobile adjustments */
+@media (max-width: 896px) and (orientation: landscape) {
+    .hero {
+        padding: 1rem 2rem;
+    }
+    
+    .hero h1 {
+        font-size: 2.25rem;
+    }
+    
+    .navbar {
+        padding: 0.5rem 1rem;
+    }
+}
+
+/* Ensure content is accessible on very small screens */
+@media (max-width: 320px) {
+    .hero h1 {
+        font-size: 1.5rem;
+    }
+    
+    .navbar {
+        padding: 0.25rem;
+    }
+    
+    .main-content {
+        padding: 0.5rem;
+    }
+    
+    .cta-button {
+        padding: 0.5rem 1rem;
+        font-size: 0.8rem;
+    }
+}

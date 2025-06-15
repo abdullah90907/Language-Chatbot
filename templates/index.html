@@ -4,125 +4,199 @@
 
 {% block content %}
 <!-- Hero Video Section -->
-<section class="relative">
-    <video autoplay loop muted class="w-full h-[600px] object-cover">
+<section class="relative overflow-hidden">
+    <video autoplay loop muted class="w-full h-[500px] md:h-[600px] object-cover">
         <source src="{{ url_for('image', filename='video.mp4') }}" type="video/mp4">
-        <img src="{{ url_for('static', filename='video-fallback.jpg') }}" alt="LangMaster Pro" class="w-full h-[600px] object-cover">
+        <img src="{{ url_for('static', filename='video-fallback.jpg') }}" alt="LangMaster Pro" class="w-full h-[500px] md:h-[600px] object-cover">
     </video>
-    <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
-        <div class="text-center text-white">
-            <h1 class="text-4xl md:text-6xl font-bold mb-4 animate-fade-in">Welcome to LangMaster Pro</h1>
-            <p class="text-xl md:text-2xl mb-6 animate-fade-in delay-200">Master languages with interactive lessons, quizzes, and AI-powered chats.</p>
-            <a href="{{ url_for('learn') }}" class="bg-green-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-600 transition transform hover:scale-105">Start Learning</a>
+    <div class="absolute inset-0 bg-gradient-to-r from-purple-900/60 via-blue-900/60 to-indigo-900/60">
+        <div class="absolute inset-0 flex items-center justify-center">
+            <div class="text-center text-white max-w-4xl px-4">
+                <h1 class="text-3xl md:text-5xl lg:text-6xl font-bold mb-4 md:mb-6 animate-hero-title bg-gradient-to-r from-yellow-300 via-pink-300 to-cyan-300 bg-clip-text text-transparent">
+                    Welcome to LangMaster Pro
+                </h1>
+                <p class="text-base md:text-xl lg:text-2xl mb-6 md:mb-8 animate-hero-subtitle font-light leading-relaxed px-4">
+                    Master languages with interactive lessons, quizzes, and AI-powered chats
+                </p>
+                <div class="animate-hero-button">
+                    <a href="{{ url_for('learn') }}" class="inline-block bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 text-white px-6 md:px-8 py-3 md:py-4 rounded-full font-semibold text-base md:text-lg hover:from-pink-600 hover:via-purple-600 hover:to-indigo-600 transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl">
+                        🚀 Start Your Journey
+                    </a>
+                </div>
+            </div>
+        </div>        <!-- Floating Elements -->
+        <div class="absolute top-20 left-10 animate-float hidden lg:block">
+            <div class="w-12 h-12 lg:w-16 lg:h-16 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full opacity-20"></div>
+        </div>
+        <div class="absolute bottom-20 right-10 animate-float-delayed hidden lg:block">
+            <div class="w-10 h-10 lg:w-12 lg:h-12 bg-gradient-to-r from-green-400 to-blue-500 rounded-full opacity-20"></div>
+        </div>
+        <div class="absolute top-1/2 left-1/4 animate-float-slow hidden xl:block">
+            <div class="w-8 h-8 lg:w-10 lg:h-10 bg-gradient-to-r from-purple-400 to-pink-500 rounded-full opacity-20"></div>
         </div>
     </div>
 </section>
 
 <!-- Core Features Section -->
-<section class="py-16 bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-12 animate-fade-in">Our Core Features</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+<section class="py-12 md:py-16 bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 relative overflow-hidden">
+    <!-- Background Pattern -->
+    <div class="absolute inset-0 opacity-5 md:opacity-10">
+        <div class="absolute top-10 left-10 w-20 h-20 md:w-24 md:h-24 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full animate-pulse-slow"></div>
+        <div class="absolute bottom-10 right-10 w-16 h-16 md:w-20 md:h-20 bg-gradient-to-r from-pink-400 to-red-500 rounded-full animate-pulse-slow"></div>
+        <div class="absolute top-1/2 left-1/2 w-24 h-24 md:w-32 md:h-32 bg-gradient-to-r from-green-400 to-cyan-500 rounded-full animate-pulse-slow transform -translate-x-1/2 -translate-y-1/2"></div>
+    </div>
+    
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <h2 class="text-2xl md:text-3xl lg:text-4xl font-bold text-center bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-8 md:mb-12 animate-fade-in">
+            ✨ Our Core Features
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
             <!-- Feature 1: Learn -->
-            <div class="bg-gray-100 rounded-lg shadow-lg p-6 text-center transform transition hover:scale-105 animate-fade-in delay-100">
-                <img src="{{ url_for('image', filename='learn1.jpeg') }}" alt="Learn" class="w-32 h-32 mx-auto mb-4 rounded-full">
-                <h3 class="text-xl font-semibold text-gray-800 mb-2">Daily Lessons</h3>
-                <p class="text-gray-600">Engaging challenges tailored to your level, from beginner to advanced.</p>
+            <div class="group bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-4 md:p-6 text-center transform transition-all duration-300 hover:scale-105 hover:shadow-xl animate-fade-in delay-100 border border-white/20 hover:bg-gradient-to-br hover:from-blue-50 hover:to-purple-50">
+                <div class="relative mb-3 md:mb-4">
+                    <img src="{{ url_for('image', filename='learn1.jpeg') }}" alt="Learn" class="w-20 h-20 md:w-24 md:h-24 mx-auto rounded-full shadow-lg transform transition-transform duration-300 group-hover:scale-110">
+                    <div class="absolute -top-1 -right-1 md:-top-2 md:-right-2 w-5 h-5 md:w-6 md:h-6 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center animate-bounce">
+                        <span class="text-white text-xs">📚</span>
+                    </div>
+                </div>
+                <h3 class="text-lg md:text-xl font-bold text-gray-800 mb-2 md:mb-3 group-hover:text-blue-600 transition-colors">Daily Lessons</h3>
+                <p class="text-gray-600 leading-relaxed text-sm md:text-base">Engaging challenges tailored to your level, from beginner to advanced.</p>
             </div>
+            
             <!-- Feature 2: Quiz -->
-            <div class="bg-gray-100 rounded-lg shadow-lg p-6 text-center transform transition hover:scale-105 animate-fade-in delay-200">
-                <img src="{{ url_for('image', filename='quiz1.jpg') }}" alt="Quiz" class="w-32 h-32 mx-auto mb-4 rounded-full">
-                <h3 class="text-xl font-semibold text-gray-800 mb-2">Interactive Quizzes</h3>
-                <p class="text-gray-600">Test your knowledge with fun, dynamic quizzes.</p>
+            <div class="group bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-4 md:p-6 text-center transform transition-all duration-300 hover:scale-105 hover:shadow-xl animate-fade-in delay-200 border border-white/20 hover:bg-gradient-to-br hover:from-green-50 hover:to-cyan-50">
+                <div class="relative mb-3 md:mb-4">
+                    <img src="{{ url_for('image', filename='quiz1.jpg') }}" alt="Quiz" class="w-20 h-20 md:w-24 md:h-24 mx-auto rounded-full shadow-lg transform transition-transform duration-300 group-hover:scale-110">
+                    <div class="absolute -top-1 -right-1 md:-top-2 md:-right-2 w-5 h-5 md:w-6 md:h-6 bg-gradient-to-r from-green-500 to-cyan-500 rounded-full flex items-center justify-center animate-bounce">
+                        <span class="text-white text-xs">🧠</span>
+                    </div>
+                </div>
+                <h3 class="text-lg md:text-xl font-bold text-gray-800 mb-2 md:mb-3 group-hover:text-green-600 transition-colors">Interactive Quizzes</h3>
+                <p class="text-gray-600 leading-relaxed text-sm md:text-base">Test your knowledge with fun, dynamic quizzes.</p>
             </div>
+            
             <!-- Feature 3: Chat -->
-            <div class="bg-gray-100 rounded-lg shadow-lg p-6 text-center transform transition hover:scale-105 animate-fade-in delay-300">
-                <img src="{{ url_for('image', filename='chat2.jpg') }}" alt="Chat" class="w-32 h-32 mx-auto mb-4 rounded-full">
-                <h3 class="text-xl font-semibold text-gray-800 mb-2">AI-Powered Chat</h3>
-                <p class="text-gray-600">Practice conversations with our intelligent AI tutor.</p>
+            <div class="group bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-4 md:p-6 text-center transform transition-all duration-300 hover:scale-105 hover:shadow-xl animate-fade-in delay-300 border border-white/20 hover:bg-gradient-to-br hover:from-purple-50 hover:to-pink-50">
+                <div class="relative mb-3 md:mb-4">
+                    <img src="{{ url_for('image', filename='chat2.jpg') }}" alt="Chat" class="w-20 h-20 md:w-24 md:h-24 mx-auto rounded-full shadow-lg transform transition-transform duration-300 group-hover:scale-110">
+                    <div class="absolute -top-1 -right-1 md:-top-2 md:-right-2 w-5 h-5 md:w-6 md:h-6 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center animate-bounce">
+                        <span class="text-white text-xs">💬</span>
+                    </div>
+                </div>
+                <h3 class="text-lg md:text-xl font-bold text-gray-800 mb-2 md:mb-3 group-hover:text-purple-600 transition-colors">AI-Powered Chat</h3>
+                <p class="text-gray-600 leading-relaxed text-sm md:text-base">Practice conversations with our intelligent AI tutor.</p>
             </div>
+            
             <!-- Feature 4: Progress -->
-            <div class="bg-gray-100 rounded-lg shadow-lg p-6 text-center transform transition hover:scale-105 animate-fade-in delay-400">
-                <img src="{{ url_for('image', filename='practice1.jpeg') }}" alt="Progress" class="w-32 h-32 mx-auto mb-4 rounded-full">
-                <h3 class="text-xl font-semibold text-gray-800 mb-2">Track Progress</h3>
-                <p class="text-gray-600">Monitor your learning journey and celebrate milestones.</p>
+            <div class="group bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-4 md:p-6 text-center transform transition-all duration-300 hover:scale-105 hover:shadow-xl animate-fade-in delay-400 border border-white/20 hover:bg-gradient-to-br hover:from-orange-50 hover:to-red-50">
+                <div class="relative mb-3 md:mb-4">
+                    <img src="{{ url_for('image', filename='practice1.jpeg') }}" alt="Progress" class="w-20 h-20 md:w-24 md:h-24 mx-auto rounded-full shadow-lg transform transition-transform duration-300 group-hover:scale-110">
+                    <div class="absolute -top-1 -right-1 md:-top-2 md:-right-2 w-5 h-5 md:w-6 md:h-6 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center animate-bounce">
+                        <span class="text-white text-xs">📈</span>
+                    </div>
+                </div>
+                <h3 class="text-lg md:text-xl font-bold text-gray-800 mb-2 md:mb-3 group-hover:text-orange-600 transition-colors">Track Progress</h3>
+                <p class="text-gray-600 leading-relaxed text-sm md:text-base">Monitor your learning journey and celebrate milestones.</p>
             </div>
         </div>
     </div>
 </section>
 
 <!-- User Feedback Carousel -->
-<section class="py-16 bg-gray-200">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-12 animate-fade-in">What Our Users Say</h2>
-        <div class="relative overflow-hidden">
-            <div class="flex animate-slide-left">
-                <!-- Testimonial 1 -->
-                <!-- Testimonial 1 -->
-                <div class="min-w-[300px] bg-white rounded-lg shadow-lg p-6 mx-4">
-                    <div class="flex items-center mb-4">
-                        <img src="{{ url_for('image', filename='user1.jpg') }}" alt="User 1" class="w-12 h-12 rounded-full mr-4 object-cover">
+<section class="py-16 md:py-20 bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 relative overflow-hidden">
+    <!-- Background Effects -->
+    <div class="absolute inset-0">
+        <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-blue-600/20 to-purple-600/20"></div>
+        <div class="absolute top-20 left-20 w-72 h-72 md:w-96 md:h-96 bg-gradient-to-r from-pink-500/10 to-orange-500/10 rounded-full blur-3xl animate-pulse-slow"></div>
+        <div class="absolute bottom-20 right-20 w-64 h-64 md:w-80 md:h-80 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 rounded-full blur-3xl animate-pulse-slow"></div>
+    </div>
+    
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-center text-white mb-12 md:mb-16 animate-fade-in">
+            💫 What Our Users Say
+        </h2>
+        <div class="testimonial-container relative overflow-hidden rounded-2xl">
+            <div class="testimonial-track flex">                <!-- Testimonial 1 -->
+                <div class="testimonial-card bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl p-6 md:p-8 transform hover:scale-105 transition-all duration-300 border border-white/20">
+                    <div class="flex items-center mb-4 md:mb-6">
+                        <img src="{{ url_for('image', filename='user1.jpg') }}" alt="User 1" class="w-12 h-12 md:w-16 md:h-16 rounded-full mr-4 object-cover shadow-lg border-4 border-gradient-to-r from-pink-400 to-purple-500">
                         <div>
-                            <h4 class="text-lg font-semibold text-gray-800">Anna S.</h4>
-                            <div class="flex text-yellow-400">★★★★★</div>
+                            <h4 class="text-lg md:text-xl font-bold text-gray-800">Anna S.</h4>
+                            <div class="flex text-yellow-400 text-sm md:text-lg">★★★★★</div>
                         </div>
                     </div>
-                    <p class="text-gray-600">"LangMaster Pro made learning Spanish so fun! The quizzes are addictive!"</p>
+                    <p class="text-gray-700 text-base md:text-lg leading-relaxed italic">"LangMaster Pro made learning Spanish so fun! The quizzes are addictive!"</p>
                 </div>
+                
                 <!-- Testimonial 2 -->
-                <div class="min-w-[300px] bg-white rounded-lg shadow-lg p-6 mx-4">
-                    <div class="flex items-center mb-4">
-                        <img src="{{ url_for('image', filename='user2.jpg') }}" alt="User 2" class="w-12 h-12 rounded-full mr-4 object-cover">
+                <div class="testimonial-card bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl p-6 md:p-8 transform hover:scale-105 transition-all duration-300 border border-white/20">
+                    <div class="flex items-center mb-4 md:mb-6">
+                        <img src="{{ url_for('image', filename='user2.jpg') }}" alt="User 2" class="w-12 h-12 md:w-16 md:h-16 rounded-full mr-4 object-cover shadow-lg border-4 border-gradient-to-r from-blue-400 to-cyan-500">
                         <div>
-                            <h4 class="text-lg font-semibold text-gray-800">Mark T.</h4>
-                            <div class="flex text-yellow-400">★★★★★</div>
+                            <h4 class="text-lg md:text-xl font-bold text-gray-800">Mark T.</h4>
+                            <div class="flex text-yellow-400 text-sm md:text-lg">★★★★★</div>
                         </div>
                     </div>
-                    <p class="text-gray-600">"The AI chat helped me practice French conversations confidently."</p>
+                    <p class="text-gray-700 text-base md:text-lg leading-relaxed italic">"The AI chat helped me practice French conversations confidently."</p>
                 </div>
+                
                 <!-- Testimonial 3 -->
-                <div class="min-w-[300px] bg-white rounded-lg shadow-lg p-6 mx-4">
-                    <div class="flex items-center mb-4">
-                        <img src="{{ url_for('image', filename='user3.jpg') }}" alt="User 3" class="w-12 h-12 rounded-full mr-4">
+                <div class="testimonial-card bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl p-6 md:p-8 transform hover:scale-105 transition-all duration-300 border border-white/20">
+                    <div class="flex items-center mb-4 md:mb-6">
+                        <img src="{{ url_for('image', filename='user3.jpg') }}" alt="User 3" class="w-12 h-12 md:w-16 md:h-16 rounded-full mr-4 shadow-lg border-4 border-gradient-to-r from-green-400 to-blue-500">
                         <div>
-                            <h4 class="text-lg font-semibold text-gray-800">Priya R.</h4>
-                            <div class="flex text-yellow-400">★★★★★</div>
+                            <h4 class="text-lg md:text-xl font-bold text-gray-800">Priya R.</h4>
+                            <div class="flex text-yellow-400 text-sm md:text-lg">★★★★★</div>
                         </div>
                     </div>
-                    <p class="text-gray-600">"Daily lessons keep me motivated to learn German every day."</p>
+                    <p class="text-gray-700 text-base md:text-lg leading-relaxed italic">"Daily lessons keep me motivated to learn German every day."</p>
                 </div>
+                
                 <!-- Testimonial 4 -->
-                <div class="min-w-[300px] bg-white rounded-lg shadow-lg p-6 mx-4">
-                    <div class="flex items-center mb-4">
-                        <img src="{{ url_for('image', filename='user4.jpg') }}" alt="User 4" class="w-12 h-12 rounded-full mr-4">
+                <div class="testimonial-card bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl p-6 md:p-8 transform hover:scale-105 transition-all duration-300 border border-white/20">
+                    <div class="flex items-center mb-4 md:mb-6">
+                        <img src="{{ url_for('image', filename='user4.jpg') }}" alt="User 4" class="w-12 h-12 md:w-16 md:h-16 rounded-full mr-4 shadow-lg border-4 border-gradient-to-r from-purple-400 to-pink-500">
                         <div>
-                            <h4 class="text-lg font-semibold text-gray-800">James L.</h4>
-                            <div class="flex text-yellow-400">★★★</div>
+                            <h4 class="text-lg md:text-xl font-bold text-gray-800">James L.</h4>
+                            <div class="flex text-yellow-400 text-sm md:text-lg">★★★★☆</div>
                         </div>
                     </div>
-                    <p class="text-gray-600">"Tracking my progress is so rewarding. Highly recommend!"</p>
+                    <p class="text-gray-700 text-base md:text-lg leading-relaxed italic">"Tracking my progress is so rewarding. Highly recommend!"</p>
                 </div>
+                
                 <!-- Testimonial 5 -->
-                <div class="min-w-[300px] bg-white rounded-lg shadow-lg p-6 mx-4">
-                    <div class="flex items-center mb-4">
-                        <img src="{{ url_for('image', filename='user5.jpg') }}" alt="User 5" class="w-12 h-12 rounded-full mr-4">
+                <div class="testimonial-card bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl p-6 md:p-8 transform hover:scale-105 transition-all duration-300 border border-white/20">
+                    <div class="flex items-center mb-4 md:mb-6">
+                        <img src="{{ url_for('image', filename='user5.jpg') }}" alt="User 5" class="w-12 h-12 md:w-16 md:h-16 rounded-full mr-4 shadow-lg border-4 border-gradient-to-r from-orange-400 to-red-500">
                         <div>
-                            <h4 class="text-lg font-semibold text-gray-800">Sofia M.</h4>
-                            <div class="flex text-yellow-400">★★★★</div>
+                            <h4 class="text-lg md:text-xl font-bold text-gray-800">Sofia M.</h4>
+                            <div class="flex text-yellow-400 text-sm md:text-lg">★★★★☆</div>
                         </div>
                     </div>
-                    <p class="text-gray-600">"The best language learning app I've tried. It's engaging and effective!"</p>
+                    <p class="text-gray-700 text-base md:text-lg leading-relaxed italic">"The best language learning app I've tried. It's engaging and effective!"</p>
                 </div>
-                <!-- Duplicate for seamless looping -->
-                <div class="min-w-[300px] bg-white rounded-lg shadow-lg p-6 mx-4">
-                    <div class="flex items-center mb-4">
-                        <img src="{{ url_for('image', filename='user1.jpg') }}" alt="User 1" class="w-12 h-12 rounded-full mr-4">
+                
+                <!-- Duplicate testimonials for seamless loop -->
+                <div class="testimonial-card bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl p-6 md:p-8 transform hover:scale-105 transition-all duration-300 border border-white/20">
+                    <div class="flex items-center mb-4 md:mb-6">
+                        <img src="{{ url_for('image', filename='user1.jpg') }}" alt="User 1" class="w-12 h-12 md:w-16 md:h-16 rounded-full mr-4 object-cover shadow-lg border-4 border-gradient-to-r from-pink-400 to-purple-500">
                         <div>
-                            <h4 class="text-lg font-semibold text-gray-800">Anna S.</h4>
-                            <div class="flex text-yellow-400">★★★★★</div>
+                            <h4 class="text-lg md:text-xl font-bold text-gray-800">Anna S.</h4>
+                            <div class="flex text-yellow-400 text-sm md:text-lg">★★★★★</div>
                         </div>
                     </div>
-                    <p class="text-gray-600">"LangMaster Pro made learning Spanish so fun! The quizzes are addictive!"</p>
+                    <p class="text-gray-700 text-base md:text-lg leading-relaxed italic">"LangMaster Pro made learning Spanish so fun! The quizzes are addictive!"</p>
+                </div>
+                
+                <div class="testimonial-card bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl p-6 md:p-8 transform hover:scale-105 transition-all duration-300 border border-white/20">
+                    <div class="flex items-center mb-4 md:mb-6">
+                        <img src="{{ url_for('image', filename='user2.jpg') }}" alt="User 2" class="w-12 h-12 md:w-16 md:h-16 rounded-full mr-4 object-cover shadow-lg border-4 border-gradient-to-r from-blue-400 to-cyan-500">
+                        <div>
+                            <h4 class="text-lg md:text-xl font-bold text-gray-800">Mark T.</h4>
+                            <div class="flex text-yellow-400 text-sm md:text-lg">★★★★★</div>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 text-base md:text-lg leading-relaxed italic">"The AI chat helped me practice French conversations confidently."</p>
                 </div>
             </div>
         </div>
@@ -130,67 +204,337 @@
 </section>
 
 <!-- Footer -->
-<footer class="bg-gray-800 text-white py-12">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+<footer class="bg-gradient-to-br from-gray-900 via-slate-900 to-black text-white py-12 md:py-16 relative overflow-hidden">
+    <!-- Background Effects -->
+    <div class="absolute inset-0">
+        <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-blue-900/20 to-purple-900/20"></div>
+        <div class="absolute top-10 right-10 w-48 h-48 md:w-64 md:h-64 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-10 left-10 w-32 h-32 md:w-48 md:h-48 bg-gradient-to-r from-pink-500/10 to-red-500/10 rounded-full blur-3xl"></div>
+    </div>
+    
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
             <!-- About -->
-            <div>
-                <h3 class="text-2xl font-bold text-white mb-4">LangMaster Pro</h3>
-                <p class="text-gray-300 font-medium text-base">Empowering you to master languages with interactive tools and AI-driven learning. Join thousands of learners worldwide!</p>
+            <div class="space-y-4 md:space-y-6">
+                <h3 class="text-2xl md:text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">LangMaster Pro</h3>
+                <p class="text-gray-300 font-medium text-base md:text-lg leading-relaxed">Empowering you to master languages with interactive tools and AI-driven learning. Join thousands of learners worldwide!</p>
+                <div class="flex space-x-4">
+                    <div class="w-2 h-2 md:w-3 md:h-3 bg-blue-500 rounded-full animate-pulse"></div>
+                    <div class="w-2 h-2 md:w-3 md:h-3 bg-purple-500 rounded-full animate-pulse" style="animation-delay: 0.2s;"></div>
+                    <div class="w-2 h-2 md:w-3 md:h-3 bg-pink-500 rounded-full animate-pulse" style="animation-delay: 0.4s;"></div>
+                </div>
             </div>
+            
             <!-- Navigation -->
-            <div>
-                <h3 class="text-2xl font-bold text-white mb-4">Quick Links</h3>
-                <ul class="space-y-2">
-                    <li><a href="{{ url_for('home') }}" class="text-gray-300 hover:text-green-500 font-medium text-base transition">Home</a></li>
-                    <li><a href="{{ url_for('learn') }}" class="text-gray-300 hover:text-green-500 font-medium text-base transition">Learn</a></li>
-                    <li><a href="{{ url_for('quiz') }}" class="text-gray-300 hover:text-green-500 font-medium text-base transition">Quiz</a></li>
-                    <li><a href="{{ url_for('chat') }}" class="text-gray-300 hover:text-green-500 font-medium text-base transition">Chat</a></li>
-                    <li><a href="{{ url_for('practice') }}" class="text-gray-300 hover:text-green-500 font-medium text-base transition">Practice</a></li>
+            <div class="space-y-4 md:space-y-6">
+                <h3 class="text-xl md:text-2xl font-bold text-white">Quick Links</h3>
+                <ul class="space-y-3 md:space-y-4">
+                    <li><a href="{{ url_for('home') }}" class="text-gray-300 hover:text-blue-400 font-medium text-base md:text-lg transition-all duration-300 hover:translate-x-2 inline-block">🏠 Home</a></li>
+                    <li><a href="{{ url_for('learn') }}" class="text-gray-300 hover:text-green-400 font-medium text-base md:text-lg transition-all duration-300 hover:translate-x-2 inline-block">📚 Learn</a></li>
+                    <li><a href="{{ url_for('quiz') }}" class="text-gray-300 hover:text-purple-400 font-medium text-base md:text-lg transition-all duration-300 hover:translate-x-2 inline-block">🧠 Quiz</a></li>
+                    <li><a href="{{ url_for('chat') }}" class="text-gray-300 hover:text-pink-400 font-medium text-base md:text-lg transition-all duration-300 hover:translate-x-2 inline-block">💬 Chat</a></li>
+                    <li><a href="{{ url_for('practice') }}" class="text-gray-300 hover:text-orange-400 font-medium text-base md:text-lg transition-all duration-300 hover:translate-x-2 inline-block">✍️ Practice</a></li>
                 </ul>
             </div>
+            
             <!-- Contact -->
-            <div>
-                <h3 class="text-2xl font-bold text-white mb-4">Contact Us</h3>
-                <p class="text-gray-300 font-medium text-base">Email: support@langmasterpro.com</p>
-                <p class="text-gray-300 font-medium text-base">Phone: +1 (555) 123-4567</p>
-                <p class="text-gray-300 font-medium text-base">Address: 123 Language Lane, Learn City, LC 12345</p>
+            <div class="space-y-4 md:space-y-6">
+                <h3 class="text-xl md:text-2xl font-bold text-white">Contact Us</h3>
+                <div class="space-y-2 md:space-y-3">
+                    <p class="text-gray-300 font-medium text-sm md:text-lg flex items-center"><span class="mr-2 md:mr-3">📧</span> support@langmasterpro.com</p>
+                    <p class="text-gray-300 font-medium text-sm md:text-lg flex items-center"><span class="mr-2 md:mr-3">📞</span> +1 (555) 123-4567</p>
+                    <p class="text-gray-300 font-medium text-sm md:text-lg flex items-center"><span class="mr-2 md:mr-3">📍</span> 123 Language Lane, Learn City</p>
+                </div>
             </div>
+            
             <!-- Social Media -->
-            <div>
-                <h3 class="text-2xl font-bold text-white mb-4">Follow Us</h3>
-                <div class="flex space-x-4">
-                    <a href="#" class="text-gray-300 hover:text-green-500 transition"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M22 12c0-5.522-4.477-10-10-10S2 6.478 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/></svg></a>
-                    <a href="#" class="text-gray-300 hover:text-green-500 transition"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/></svg></a>
-                    <a href="#" class="text-gray-300 hover:text-green-500 transition"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M4.98 3.5c0 1.381-1.11 2.5-2.48 2.5s-2.48-1.119-2.48-2.5c0-1.38 1.11-2.5 2.48-2.5s2.48 1.12 2.48 2.5zm.02 4.5h-5v16h5v-16zm7.982 0h-4.968v16h4.969v-8.399c0-4.67 6.029-5.052 6.029 0v8.399h4.988v-10.131c0-7.88-8.922-7.593-11.018-3.714v-2.155z"/></svg></a>
+            <div class="space-y-4 md:space-y-6">
+                <h3 class="text-xl md:text-2xl font-bold text-white">Follow Us</h3>
+                <div class="flex space-x-4 md:space-x-6">
+                    <a href="#" class="text-gray-300 hover:text-blue-400 transition-all duration-300 transform hover:scale-125 hover:rotate-12">
+                        <svg class="w-6 h-6 md:w-8 md:h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M22 12c0-5.522-4.477-10-10-10S2 6.478 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/></svg>
+                    </a>
+                    <a href="#" class="text-gray-300 hover:text-cyan-400 transition-all duration-300 transform hover:scale-125 hover:rotate-12">
+                        <svg class="w-6 h-6 md:w-8 md:h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/></svg>
+                    </a>
+                    <a href="#" class="text-gray-300 hover:text-purple-400 transition-all duration-300 transform hover:scale-125 hover:rotate-12">
+                        <svg class="w-6 h-6 md:w-8 md:h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M4.98 3.5c0 1.381-1.11 2.5-2.48 2.5s-2.48-1.119-2.48-2.5c0-1.38 1.11-2.5 2.48-2.5s2.48 1.12 2.48 2.5zm.02 4.5h-5v16h5v-16zm7.982 0h-4.968v16h4.969v-8.399c0-4.67 6.029-5.052 6.029 0v8.399h4.988v-10.131c0-7.88-8.922-7.593-11.018-3.714v-2.155z"/></svg>
+                    </a>
+                </div>
+                <div class="mt-4 md:mt-6 p-3 md:p-4 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-xl border border-white/10">
+                    <p class="text-xs md:text-sm text-gray-300">🎉 Join 50,000+ learners worldwide!</p>
                 </div>
             </div>
         </div>
-        <div class="mt-8 text-center text-gray-200 font-medium text-base">
-            <p>© 2025 LangMaster Pro. All rights reserved.</p>
+        
+        <div class="mt-8 md:mt-12 pt-6 md:pt-8 border-t border-gray-700 text-center">
+            <p class="text-gray-300 font-medium text-sm md:text-lg">© 2025 LangMaster Pro. All rights reserved. Made with ❤️ for language learners.</p>
         </div>
     </div>
 </footer>
 
-<!-- Custom CSS for Animations -->
-<style>
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(20px); }
-        to { opacity: 1; transform: translateY(0); }
+<!-- Enhanced CSS for Modern Animations -->
+<style>        /* Hero Animations - More Subtle */
+        @keyframes heroTitle {
+            0% { 
+                opacity: 0; 
+                transform: translateY(30px) scale(0.95); 
+            }
+            100% { 
+                opacity: 1; 
+                transform: translateY(0) scale(1); 
+            }
+        }
+        
+        @keyframes heroSubtitle {
+            0% { 
+                opacity: 0; 
+                transform: translateY(20px); 
+            }
+            100% { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+        
+        @keyframes heroButton {
+            0% { 
+                opacity: 0; 
+                transform: translateY(15px) scale(0.9); 
+            }
+            100% { 
+                opacity: 1; 
+                transform: translateY(0) scale(1); 
+            }
+        }
+        
+        .animate-hero-title {
+            animation: heroTitle 1s ease-out forwards;
+        }
+        
+        .animate-hero-subtitle {
+            animation: heroSubtitle 0.8s ease-out 0.3s forwards;
+            opacity: 0;
+        }
+        
+        .animate-hero-button {
+            animation: heroButton 0.6s ease-out 0.6s forwards;
+            opacity: 0;
+        }
+        
+        /* Floating Elements - Smoother */
+        @keyframes float {
+            0%, 100% { 
+                transform: translateY(0px) rotate(0deg); 
+            }
+            50% { 
+                transform: translateY(-15px) rotate(3deg); 
+            }
+        }
+        
+        @keyframes floatDelayed {
+            0%, 100% { 
+                transform: translateY(0px) rotate(0deg); 
+            }
+            50% { 
+                transform: translateY(-10px) rotate(-3deg); 
+            }
+        }
+        
+        @keyframes floatSlow {
+            0%, 100% { 
+                transform: translateY(0px) rotate(0deg); 
+            }
+            50% { 
+                transform: translateY(-8px) rotate(2deg); 
+            }
+        }
+        
+        .animate-float {
+            animation: float 8s ease-in-out infinite;
+        }
+        
+        .animate-float-delayed {
+            animation: floatDelayed 10s ease-in-out infinite 2s;
+        }
+        
+        .animate-float-slow {
+            animation: floatSlow 12s ease-in-out infinite 1s;
+        }
+        
+        /* Fade In Animations - Gentler */
+        @keyframes fadeIn {
+            from { 
+                opacity: 0; 
+                transform: translateY(20px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+        
+        .animate-fade-in {
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+        
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+        .delay-400 { animation-delay: 0.4s; }      /* Enhanced Carousel Animation - Fixed */
+    .testimonial-container {
+        position: relative;
+        overflow: hidden;
+        max-width: 100%;
     }
-    .animate-fade-in {
-        animation: fadeIn 1s ease-out forwards;
+    
+    .testimonial-track {
+        display: flex;
+        animation: slideTestimonials 40s linear infinite;
+        width: max-content;
+        will-change: transform;
     }
-    .delay-100 { animation-delay: 100ms; }
-    .delay-200 { animation-delay: 200ms; }
-    .delay-300 { animation-delay: 300ms; }
-    .delay-400 { animation-delay: 400ms; }
-    @keyframes slideLeft {
-        0% { transform: translateX(0); }
-        100% { transform: translateX(-50%); }
+    
+    @keyframes slideTestimonials {
+        0% { 
+            transform: translateX(0); 
+        }
+        100% { 
+            transform: translateX(calc(-50% - 1rem)); 
+        }
     }
-    .animate-slide-left {
-        animation: slideLeft 20s linear infinite;
+    
+    .testimonial-container:hover .testimonial-track {
+        animation-play-state: paused;
     }
+    
+    .testimonial-card {
+        flex-shrink: 0;
+        width: 320px;
+        margin: 0 0.75rem;
+    }
+    
+    /* Responsive testimonial sizing */
+    @media (max-width: 768px) {
+        .testimonial-card {
+            width: 280px;
+            margin: 0 0.5rem;
+        }
+        
+        .testimonial-track {
+            animation-duration: 35s;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .testimonial-card {
+            width: 260px;
+            margin: 0 0.25rem;
+        }
+        
+        .testimonial-track {
+            animation-duration: 30s;
+        }
+    }/* Pulse Animations - More Subtle */
+        @keyframes pulseSlow {
+            0%, 100% { 
+                opacity: 0.4; 
+                transform: scale(1); 
+            }
+            50% { 
+                opacity: 0.6; 
+                transform: scale(1.02); 
+            }
+        }
+        
+        .animate-pulse-slow {
+            animation: pulseSlow 6s ease-in-out infinite;
+        }
+        
+        /* Custom Gradient Text */
+        .bg-clip-text {
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        /* Backdrop Blur Support */
+        .backdrop-blur-sm {
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+        }
+        
+        /* Smooth Scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Enhanced Hover Effects - Less Aggressive */
+        .group:hover .group-hover\:scale-110 {
+            transform: scale(1.05);
+        }
+        
+        .group:hover .group-hover\:text-blue-600 {
+            color: #2563eb;
+        }
+        
+        .group:hover .group-hover\:text-green-600 {
+            color: #16a34a;
+        }
+        
+        .group:hover .group-hover\:text-purple-600 {
+            color: #9333ea;
+        }
+        
+        .group:hover .group-hover\:text-orange-600 {
+            color: #ea580c;
+        }
+          /* Mobile Optimizations */
+        @media (max-width: 640px) {
+            .animate-float, .animate-float-delayed, .animate-float-slow {
+                display: none;
+            }
+            
+            .testimonial-container {
+                padding: 0 1rem;
+            }
+            
+            /* Reduce large text on mobile */
+            .hero-title {
+                font-size: 2.5rem !important;
+                line-height: 1.2;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.1rem !important;
+            }
+            
+            /* Better mobile spacing */
+            .section-padding {
+                padding: 2rem 0;
+            }
+            
+            /* Hide complex background elements on small screens */
+            .background-blur {
+                opacity: 0.3;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 2rem !important;
+            }
+            
+            .feature-card {
+                margin: 0.5rem;
+                padding: 1rem;
+            }
+            
+            /* Smaller buttons on mobile */
+            .cta-button {
+                font-size: 0.9rem;
+                padding: 0.75rem 1.25rem;
+            }
+        }
 </style>
 {% endblock %}
