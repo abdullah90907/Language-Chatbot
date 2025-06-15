@@ -15,9 +15,11 @@ app.secret_key = os.environ.get('SECRET_KEY', 'your-secret-key-here-change-in-pr
 
 # Initialize Groq client with API key from environment variable
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
-if not GROQ_API_KEY:
-    raise ValueError("GROQ_API_KEY environment variable is required")
-client = Groq(api_key=GROQ_API_KEY)
+if GROQ_API_KEY:
+    client = Groq(api_key=GROQ_API_KEY)
+else:
+    client = None
+    print("Warning: GROQ_API_KEY not set. AI features will not work.")
 
 # Language configurations
 LANGUAGES = {
@@ -29,6 +31,9 @@ LANGUAGES = {
 
 # Fetch AI-generated response
 def get_ai_response(prompt, language, level):
+    if not client:
+        return "AI service is currently unavailable. Please check configuration."
+    
     try:
         messages = [
             {"role": "system", "content": f"You are a helpful {language} language tutor at {level} level."},
