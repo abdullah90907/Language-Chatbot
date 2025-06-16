@@ -310,7 +310,7 @@ def chat():
                          selected_level=session['level'])
 
 @app.route('/image/<filename>')
-def serve_image(filename):
+def image(filename):
     """Serve images from the image directory"""
     try:
         return send_from_directory('../image', filename)
