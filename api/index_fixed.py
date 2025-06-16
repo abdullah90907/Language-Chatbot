@@ -32,6 +32,12 @@ else:
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
 client = None
 
+# Debug environment variables
+print("🔍 Environment Debug:")
+print(f"GROQ_API_KEY present: {bool(GROQ_API_KEY)}")
+print(f"GROQ_API_KEY length: {len(GROQ_API_KEY) if GROQ_API_KEY else 0}")
+print(f"GROQ_AVAILABLE: {GROQ_AVAILABLE}")
+
 if GROQ_AVAILABLE and GROQ_API_KEY:
     try:
         client = Groq(api_key=GROQ_API_KEY)
@@ -39,8 +45,10 @@ if GROQ_AVAILABLE and GROQ_API_KEY:
     except Exception as e:
         print(f"❌ Groq initialization failed: {e}")
         client = None
+elif not GROQ_API_KEY:
+    print("⚠️ GROQ_API_KEY environment variable not found")
 else:
-    print("⚠️ Groq API not available - AI features disabled")
+    print("⚠️ Groq library not available")
 
 # Language configurations
 LANGUAGES = {
@@ -52,8 +60,14 @@ LANGUAGES = {
 
 def get_ai_response(prompt, language, level):
     """Get AI response with proper error handling"""
+    if not GROQ_AVAILABLE:
+        return "❌ AI service unavailable: Groq library not installed"
+    
+    if not GROQ_API_KEY:
+        return "❌ AI service unavailable: GROQ_API_KEY environment variable not set"
+    
     if not client:
-        return "AI service is currently unavailable. Please set GROQ_API_KEY environment variable."
+        return "❌ AI service unavailable: Groq client initialization failed"
     
     try:
         messages = [
@@ -68,7 +82,7 @@ def get_ai_response(prompt, language, level):
         )
         return response.choices[0].message.content
     except Exception as e:
-        return f"AI Error: {str(e)}"
+        return f"❌ AI Error: {str(e)}"
 
 def generate_daily_challenge(language, level, day_number):
     """Generate daily challenge content"""
