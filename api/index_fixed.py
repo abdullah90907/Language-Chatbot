@@ -244,9 +244,10 @@ def quiz():
               2. [Option 2] 
               3. [Option 3]
               4. [Option 4]
-            - Correct answer: [Option text]
-            """
+            - Correct answer: [Option text]            """
+            print(f"🎯 Quiz prompt: {prompt}")
             response = get_ai_response(prompt, session['language'], session['level'])
+            print(f"🎯 Quiz response: {response}")
             
             # Parse response
             question_match = re.search(r'^- Question: (.*?)(?=\n- Options:|\n|$)', response, re.DOTALL)
@@ -328,9 +329,11 @@ def chat():
                 'content': user_message
             })
             
-            # Get AI response
+            # Get AI response with debugging
             prompt = f"Respond to this message in {session['language']} at {session['level']} level. Be encouraging and helpful as a language tutor: {user_message}"
+            print(f"🤖 Chat prompt: {prompt}")
             ai_response = get_ai_response(prompt, session['language'], session['level'])
+            print(f"🤖 Chat response: {ai_response}")
             
             # Add AI response
             session['chat_messages'].append({
@@ -372,6 +375,24 @@ def health_check():
         'secret_key_set': bool(os.environ.get('SECRET_KEY')),
         'groq_api_key_set': bool(os.environ.get('GROQ_API_KEY'))
     }
+
+# Test AI endpoint
+@app.route('/test-ai')
+def test_ai():
+    """Test AI functionality"""
+    try:
+        test_response = get_ai_response("Say hello in a friendly way", "English", "Beginner")
+        return {
+            'status': 'success',
+            'response': test_response,
+            'client_status': client is not None
+        }
+    except Exception as e:
+        return {
+            'status': 'error',
+            'error': str(e),
+            'client_status': client is not None
+        }
 
 # Configure app for production
 app.config['TEMPLATES_AUTO_RELOAD'] = True
