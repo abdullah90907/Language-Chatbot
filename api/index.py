@@ -65,11 +65,11 @@ def generate_daily_challenge(language, level, day_number):
     ### Task 1: Vocabulary Boost
     Learn these key phrases:
     - Good morning: A friendly morning greeting
-    - How are you?: Ask about someone’s day
+    - How are you?: Ask about someone's day
     ### Task 2: Practice Speaking
     Say these sentences aloud:
     1. "Good morning! How are you?"
-    2. "I’m happy to meet you!"
+    2. "I'm happy to meet you!"
     ### Task 3: Quick Writing
     Write a short greeting to a friend in {language}.
     """
@@ -423,3 +423,4 @@ def image(filename):
 
 # For Vercel deployment - expose the Flask app directly
 # Vercel will automatically detect the 'app' variable
+handler = app
