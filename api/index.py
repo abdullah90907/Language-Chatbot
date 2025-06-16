@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, session, redirect, url_for, jsonify
 from flask import send_from_directory
+from groq import Groq
 import os
 import markdown
 from datetime import datetime, date
@@ -7,45 +8,18 @@ import re
 import random
 import time
 
-# Try to import Groq with error handling
-try:
-    from groq import Groq
-    GROQ_AVAILABLE = True
-except ImportError as e:
-    print(f"Groq import failed: {e}")
-    GROQ_AVAILABLE = False
-    Groq = None
-
 app = Flask(__name__, 
             template_folder='../templates',
             static_folder='../static')
 app.secret_key = os.environ.get('SECRET_KEY', 'your-secret-key-here-change-in-production')
 
-# Add image folder configuration for Vercel
-app.config['IMAGE_FOLDER'] = '../image'
-
-# Initialize Groq client with API key from environment variable
+# Initialize Groq client with API key
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
-client = None
-
-def initialize_groq_client():
-    global client
-    if not GROQ_AVAILABLE:
-        print("Groq library not available")
-        return
-        
-    if GROQ_API_KEY and not client:
-        try:
-            client = Groq(api_key=GROQ_API_KEY)
-            print("Groq client initialized successfully")
-        except Exception as e:
-            print(f"Failed to initialize Groq client: {e}")
-            client = None
-    elif not GROQ_API_KEY:
-        print("Warning: GROQ_API_KEY not set. AI features will not work.")
-
-# Initialize client on module load
-initialize_groq_client()
+if GROQ_API_KEY:
+    client = Groq(api_key=GROQ_API_KEY)
+else:
+    client = None
+    print("Warning: GROQ_API_KEY not set. AI features will not work.")
 
 # Language configurations
 LANGUAGES = {
@@ -445,8 +419,10 @@ def chat():
 
 @app.route('/image/<filename>')
 def image(filename):
-    return send_from_directory(app.config['IMAGE_FOLDER'], filename)
+    return send_from_directory('../image', filename)
 
-# For Vercel deployment - expose the Flask app directly
-# Vercel will automatically detect the 'app' variable
-handler = app
+# For Vercel deployment
+app.config['TEMPLATES_AUTO_RELOAD'] = True
+
+if __name__ == '__main__':
+    app.run(debug=True)
