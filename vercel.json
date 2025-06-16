@@ -1,14 +1,22 @@
 {
   "builds": [
     {
-      "src": "api/index.py",
+      "src": "api/index_fixed.py",
       "use": "@vercel/python"
     }
   ],
   "routes": [
     {
+      "src": "/static/(.*)",
+      "dest": "/api/index_fixed.py"
+    },
+    {
+      "src": "/image/(.*)",
+      "dest": "/api/index_fixed.py"
+    },
+    {
       "src": "/(.*)",
-      "dest": "api/index.py"
+      "dest": "/api/index_fixed.py"
     }
   ]
 }
