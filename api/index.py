@@ -1,12 +1,20 @@
 from flask import Flask, render_template, request, session, redirect, url_for, jsonify
 from flask import send_from_directory
-from groq import Groq
 import os
 import markdown
 from datetime import datetime, date
 import re
 import random
 import time
+
+# Try to import Groq with error handling
+try:
+    from groq import Groq
+    GROQ_AVAILABLE = True
+except ImportError as e:
+    print(f"Groq import failed: {e}")
+    GROQ_AVAILABLE = False
+    Groq = None
 
 app = Flask(__name__, 
             template_folder='../templates',
@@ -18,11 +26,26 @@ app.config['IMAGE_FOLDER'] = '../image'
 
 # Initialize Groq client with API key from environment variable
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
-if GROQ_API_KEY:
-    client = Groq(api_key=GROQ_API_KEY)
-else:
-    client = None
-    print("Warning: GROQ_API_KEY not set. AI features will not work.")
+client = None
+
+def initialize_groq_client():
+    global client
+    if not GROQ_AVAILABLE:
+        print("Groq library not available")
+        return
+        
+    if GROQ_API_KEY and not client:
+        try:
+            client = Groq(api_key=GROQ_API_KEY)
+            print("Groq client initialized successfully")
+        except Exception as e:
+            print(f"Failed to initialize Groq client: {e}")
+            client = None
+    elif not GROQ_API_KEY:
+        print("Warning: GROQ_API_KEY not set. AI features will not work.")
+
+# Initialize client on module load
+initialize_groq_client()
 
 # Language configurations
 LANGUAGES = {
