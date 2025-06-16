@@ -13,6 +13,9 @@ app = Flask(__name__,
             static_folder='../static')
 app.secret_key = os.environ.get('SECRET_KEY', 'your-secret-key-here-change-in-production')
 
+# Add image folder configuration for Vercel
+app.config['IMAGE_FOLDER'] = '../image'
+
 # Initialize Groq client with API key from environment variable
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
 if GROQ_API_KEY:
@@ -419,7 +422,7 @@ def chat():
 
 @app.route('/image/<filename>')
 def image(filename):
-    return send_from_directory('../image', filename)
+    return send_from_directory(app.config['IMAGE_FOLDER'], filename)
 
 # For Vercel deployment - expose the Flask app directly
 # Vercel will automatically detect the 'app' variable
