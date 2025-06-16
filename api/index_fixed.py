@@ -40,15 +40,24 @@ print(f"GROQ_AVAILABLE: {GROQ_AVAILABLE}")
 
 if GROQ_AVAILABLE and GROQ_API_KEY:
     try:
-        # Initialize Groq client with basic configuration
+        # Try simple initialization first to avoid parameter issues
         client = Groq(api_key=GROQ_API_KEY)
         print("✅ Groq client initialized successfully")
-    except ImportError as e:
-        print(f"❌ Groq import error: {e}")
-        client = None
-    except ValueError as e:
-        print(f"❌ Groq API key error: {e}")
-        client = None
+    except TypeError as e:
+        if "proxies" in str(e):
+            print(f"❌ Groq proxies error: {e}")
+            print("🔄 Trying alternative initialization...")
+            # Try without any extra parameters
+            try:
+                import groq
+                client = groq.Groq(api_key=GROQ_API_KEY)
+                print("✅ Groq client initialized with alternative method")
+            except Exception as e2:
+                print(f"❌ Alternative initialization failed: {e2}")
+                client = None
+        else:
+            print(f"❌ Groq TypeError: {e}")
+            client = None
     except Exception as e:
         print(f"❌ Groq initialization failed: {type(e).__name__}: {str(e)}")
         client = None
