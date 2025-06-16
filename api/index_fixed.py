@@ -40,10 +40,17 @@ print(f"GROQ_AVAILABLE: {GROQ_AVAILABLE}")
 
 if GROQ_AVAILABLE and GROQ_API_KEY:
     try:
+        # Initialize Groq client with basic configuration
         client = Groq(api_key=GROQ_API_KEY)
         print("✅ Groq client initialized successfully")
+    except ImportError as e:
+        print(f"❌ Groq import error: {e}")
+        client = None
+    except ValueError as e:
+        print(f"❌ Groq API key error: {e}")
+        client = None
     except Exception as e:
-        print(f"❌ Groq initialization failed: {e}")
+        print(f"❌ Groq initialization failed: {type(e).__name__}: {str(e)}")
         client = None
 elif not GROQ_API_KEY:
     print("⚠️ GROQ_API_KEY environment variable not found")
@@ -59,15 +66,22 @@ LANGUAGES = {
 }
 
 def get_ai_response(prompt, language, level):
-    """Get AI response with proper error handling"""
+    """Get AI response with proper error handling and lazy initialization"""
+    global client
+    
     if not GROQ_AVAILABLE:
         return "❌ AI service unavailable: Groq library not installed"
     
     if not GROQ_API_KEY:
         return "❌ AI service unavailable: GROQ_API_KEY environment variable not set"
     
+    # Lazy initialization - try to create client when needed
     if not client:
-        return "❌ AI service unavailable: Groq client initialization failed"
+        try:
+            client = Groq(api_key=GROQ_API_KEY)
+            print("✅ Groq client initialized on demand")
+        except Exception as e:
+            return f"❌ Groq client initialization failed: {type(e).__name__}: {str(e)}"
     
     try:
         messages = [
@@ -82,7 +96,7 @@ def get_ai_response(prompt, language, level):
         )
         return response.choices[0].message.content
     except Exception as e:
-        return f"❌ AI Error: {str(e)}"
+        return f"❌ AI Error: {type(e).__name__}: {str(e)}"
 
 def generate_daily_challenge(language, level, day_number):
     """Generate daily challenge content"""
