@@ -320,31 +320,71 @@ def chat():
     if 'chat_messages' not in session:
         session['chat_messages'] = []
 
+    error_message = None
+    user_message = None
+    assistant_response = None
+
     if request.method == 'POST':
-        user_message = request.form.get('message')
-        if user_message:
-            # Add user message
-            session['chat_messages'].append({
-                'role': 'user',
-                'content': user_message
-            })
+        user_input = request.form.get('user_input')  # Changed from 'message' to 'user_input' to match template
+        if user_input:
+            try:
+                # Add user message to session for persistence
+                session['chat_messages'].append({
+                    'role': 'user',
+                    'content': user_input
+                })
+                
+                # Get AI response with proper prompting
+                prompt = f"""
+                    You are a conversational language tutor for {session['language']} at {session['level']} level.
+                    The user has said: "{user_input}"
+                    Respond in Markdown with:
+                    - Feedback on the user's input (correctness, grammar, suggestions).
+                    - A follow-up question or prompt to continue the conversation.
+                    Keep the tone friendly and encouraging.
+                    Example:
+                    **Feedback**: Great job! Your sentence is correct, but you could use "hola" for a more casual greeting.
+                    **Next**: How would you ask someone their name in {session['language']}?
+                    """
+                print(f"🤖 Chat prompt: {prompt}")
+                ai_response = get_ai_response(prompt, session['language'], session['level'])
+                print(f"🤖 Chat response: {ai_response}")
+                
+                # Add AI response to session for persistence
+                session['chat_messages'].append({
+                    'role': 'assistant', 
+                    'content': ai_response
+                })
+                
+                session.modified = True
+                
+                # Set variables for template (latest exchange)
+                user_message = user_input
+                assistant_response = markdown.markdown(ai_response)
+                
+            except Exception as e:
+                error_message = f"Failed to generate response: {str(e)}"
+                print(f"🚨 Chat error: {error_message}")
+        else:
+            error_message = "Please enter a message."
+
+    # If no current exchange, show the latest from session
+    if not user_message and session['chat_messages']:
+        # Get the last two messages (user and assistant)
+        messages = session['chat_messages']
+        if len(messages) >= 2:
+            last_user = next((msg for msg in reversed(messages) if msg['role'] == 'user'), None)
+            last_assistant = next((msg for msg in reversed(messages) if msg['role'] == 'assistant'), None)
             
-            # Get AI response with debugging
-            prompt = f"Respond to this message in {session['language']} at {session['level']} level. Be encouraging and helpful as a language tutor: {user_message}"
-            print(f"🤖 Chat prompt: {prompt}")
-            ai_response = get_ai_response(prompt, session['language'], session['level'])
-            print(f"🤖 Chat response: {ai_response}")
-            
-            # Add AI response
-            session['chat_messages'].append({
-                'role': 'assistant', 
-                'content': ai_response
-            })
-            
-            session.modified = True
+            if last_user:
+                user_message = last_user['content']
+            if last_assistant:
+                assistant_response = markdown.markdown(last_assistant['content'])
 
     return render_template('chat.html',
-                         messages=session['chat_messages'],
+                         user_message=user_message,
+                         assistant_response=assistant_response,
+                         error_message=error_message,
                          languages=LANGUAGES,
                          selected_language=session['language'],
                          selected_level=session['level'])
@@ -400,3 +440,7 @@ app.config['TEMPLATES_AUTO_RELOAD'] = True
 # For local development
 if __name__ == '__main__':
     app.run(debug=True)
+
+# Export app for Vercel - CRITICAL for serverless deployment
+def handler(request):
+    return app(request.environ, request.start_response)

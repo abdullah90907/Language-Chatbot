@@ -371,40 +371,66 @@ def chat():
         session['language'] = 'English'
     if 'level' not in session:
         session['level'] = 'Beginner'
+    if 'chat_messages' not in session:
+        session['chat_messages'] = []
 
     error_message = None
     user_message = None
     assistant_response = None
 
     if request.method == 'POST':
-        action = request.form.get('action')
-        if action == 'send':
-            user_input = request.form.get('user_input')
-            if user_input:
-                try:
-                    prompt = f"""
-                        You are a conversational language tutor for {session['language']} at {session['level']} level.
-                        The user has said: "{user_input}"
-                        Respond in Markdown with:
-                        - Feedback on the user's input (correctness, grammar, suggestions).
-                        - A follow-up question or prompt to continue the conversation.
-                        Keep the tone friendly and encouraging.
-                        Example:
-                        **Feedback**: Great job! Your sentence is correct, but you could use "hola" for a more casual greeting.
-                        **Next**: How would you ask someone their name in {session['language']}?
-                        """
-                    response = get_ai_response(prompt, session['language'], session['level'])
-                    assistant_response = markdown.markdown(response)
-                    user_message = user_input
-                except Exception as e:
-                    error_message = f"Failed to generate response: {str(e)}"
-            else:
-                error_message = "Please enter a message."
-            return redirect(url_for('chat', user_message=user_message, assistant_response=assistant_response))
+        user_input = request.form.get('user_input')
+        if user_input:
+            try:
+                # Add user message to session for persistence
+                session['chat_messages'].append({
+                    'role': 'user',
+                    'content': user_input
+                })
+                
+                # Generate AI response
+                prompt = f"""
+                    You are a conversational language tutor for {session['language']} at {session['level']} level.
+                    The user has said: "{user_input}"
+                    Respond in Markdown with:
+                    - Feedback on the user's input (correctness, grammar, suggestions).
+                    - A follow-up question or prompt to continue the conversation.
+                    Keep the tone friendly and encouraging.
+                    Example:
+                    **Feedback**: Great job! Your sentence is correct, but you could use "hola" for a more casual greeting.
+                    **Next**: How would you ask someone their name in {session['language']}?
+                    """
+                response = get_ai_response(prompt, session['language'], session['level'])
+                
+                # Add AI response to session for persistence
+                session['chat_messages'].append({
+                    'role': 'assistant',
+                    'content': response
+                })
+                
+                session.modified = True
+                
+                # Set variables for template (latest exchange)
+                user_message = user_input
+                assistant_response = markdown.markdown(response)
+                
+            except Exception as e:
+                error_message = f"Failed to generate response: {str(e)}"
+        else:
+            error_message = "Please enter a message."
 
-    # Get query parameters for rendering
-    user_message = request.args.get('user_message')
-    assistant_response = request.args.get('assistant_response')
+    # If no current exchange, show the latest from session
+    if not user_message and session['chat_messages']:
+        # Get the last two messages (user and assistant)
+        messages = session['chat_messages']
+        if len(messages) >= 2:
+            last_user = next((msg for msg in reversed(messages) if msg['role'] == 'user'), None)
+            last_assistant = next((msg for msg in reversed(messages) if msg['role'] == 'assistant'), None)
+            
+            if last_user:
+                user_message = last_user['content']
+            if last_assistant:
+                assistant_response = markdown.markdown(last_assistant['content'])
 
     return render_template(
         'chat.html',

@@ -88,7 +88,6 @@
                     <!-- Chat Input Form -->
                     <div class="mt-8">
                         <form method="POST" action="{{ url_for('chat') }}" class="space-y-4">
-                            <input type="hidden" name="action" value="send">
                             <div class="relative">
                                 <textarea name="user_input" 
                                           placeholder="Type your message in {{ languages[selected_language] }}... 💬" 
