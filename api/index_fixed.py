@@ -1,36 +1,47 @@
 from flask import Flask, render_template, request, session, redirect, url_for, jsonify
 from flask import send_from_directory
-from groq import Groq
 import os
 import markdown
-from datetime import datetime, date
 import re
 import random
 import time
 
+# Try to import Groq safely
+try:
+    from groq import Groq
+    GROQ_AVAILABLE = True
+except ImportError:
+    GROQ_AVAILABLE = False
+    print("Warning: Groq not available")
+
 app = Flask(__name__, 
             template_folder='../templates',
             static_folder='../static')
-app.secret_key = os.environ.get('SECRET_KEY', 'your-secret-key-here-change-in-production')
 
-# Configure session for better persistence in serverless environment
-app.config['SESSION_COOKIE_SECURE'] = False  # Set to True in production with HTTPS
-app.config['SESSION_COOKIE_HTTPONLY'] = True
-app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
+# Secret key configuration - CRITICAL for sessions
+SECRET_KEY = os.environ.get('SECRET_KEY')
+if SECRET_KEY:
+    app.secret_key = SECRET_KEY
+else:
+    # Generate a fallback secret key for development
+    app.secret_key = 'dev-fallback-key-change-in-production-12345'
+    print("Warning: Using fallback SECRET_KEY - set environment variable for production")
 
-# Initialize Groq client with API key
+# Groq API configuration
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
 client = None
 
-if GROQ_API_KEY:
+if GROQ_AVAILABLE and GROQ_API_KEY:
     try:
         client = Groq(api_key=GROQ_API_KEY)
         print("✅ Groq client initialized successfully")
     except Exception as e:
         print(f"❌ Groq initialization failed: {type(e).__name__}: {str(e)}")
         client = None
+elif not GROQ_API_KEY:
+    print("⚠️ GROQ_API_KEY environment variable not found")
 else:
-    print("⚠️ GROQ_API_KEY not set. AI features will not work.")
+    print("⚠️ Groq library not available")
 
 # Language configurations
 LANGUAGES = {
@@ -40,14 +51,17 @@ LANGUAGES = {
     "French": "🇫🇷 French"
 }
 
-# Fetch AI-generated response
 def get_ai_response(prompt, language, level):
+    """Get AI response with proper error handling and lazy initialization"""
     global client
+    
+    if not GROQ_AVAILABLE:
+        return "❌ AI service unavailable: Groq library not installed"
     
     if not GROQ_API_KEY:
         return "❌ AI service unavailable: GROQ_API_KEY environment variable not set"
     
-    # Lazy initialization - try to create client when needed if it doesn't exist
+    # Lazy initialization - try to create client when needed
     if not client:
         try:
             client = Groq(api_key=GROQ_API_KEY)
@@ -463,43 +477,56 @@ def chat():
 
 @app.route('/image/<filename>')
 def image(filename):
-    return send_from_directory('../image', filename)
+    """Serve images from the image directory"""
+    try:
+        return send_from_directory('../image', filename)
+    except Exception as e:
+        print(f"Image error: {e}")
+        return f"Image not found: {filename}", 404
 
-# Health check endpoint for debugging
+@app.route('/static/<path:filename>')
+def serve_static(filename):
+    """Serve static files"""
+    try:
+        return send_from_directory('../static', filename)
+    except Exception as e:
+        print(f"Static file error: {e}")
+        return f"Static file not found: {filename}", 404
+
+# Health check endpoint
 @app.route('/health')
 def health_check():
-    """Health check endpoint for debugging deployment issues"""
-    return {
+    """Health check endpoint"""
+    return jsonify({
         'status': 'healthy',
         'groq_available': client is not None,
         'groq_api_key_set': bool(GROQ_API_KEY),
-        'secret_key_set': bool(app.secret_key)
-    }
+        'secret_key_set': bool(app.secret_key),
+        'groq_library_available': GROQ_AVAILABLE
+    })
 
-# Test AI endpoint for debugging
+# Test AI endpoint
 @app.route('/test-ai')
 def test_ai():
-    """Test AI functionality for debugging"""
+    """Test AI functionality"""
     try:
         test_response = get_ai_response("Say hello in a friendly way", "English", "Beginner")
-        return {
+        return jsonify({
             'status': 'success',
             'response': test_response,
             'client_status': client is not None
-        }
+        })
     except Exception as e:
-        return {
+        return jsonify({
             'status': 'error',
             'error': str(e),
             'client_status': client is not None
-        }
+        })
 
 # For Vercel deployment
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 
+# This is the entry point for Vercel
+# Vercel will look for the 'app' variable
 if __name__ == '__main__':
     app.run(debug=True)
-
-# Export app for Vercel - CRITICAL for serverless deployment
-def handler(request):
-    return app(request.environ, request.start_response)

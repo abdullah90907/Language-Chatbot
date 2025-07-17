@@ -2,3 +2,4 @@ Flask==3.0.3
 groq==0.4.1
 markdown==3.5.1
 httpx==0.24.1
+Werkzeug==3.0.3
